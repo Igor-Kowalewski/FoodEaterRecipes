@@ -1,7 +1,11 @@
-﻿{
+{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/FoodEaterRecipes",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:8888",
       "sslPort": 0
@@ -18,10 +22,10 @@
     "FoodEaterRecipes": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "http://localhost:5000"
     }
   }
 }

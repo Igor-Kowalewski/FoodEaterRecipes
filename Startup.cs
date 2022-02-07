@@ -23,9 +23,10 @@ namespace FoodEaterRecipes
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddRazorPages();
+               //.AddRazorRuntimeCompilation();
+            //services.AddRazorPages();
         }
-
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -44,7 +45,7 @@ namespace FoodEaterRecipes
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                //endpoints.MapRazorPages();
 
                 endpoints.MapControllerRoute("Default",
                     "/{controller}/{action}/{id?}",
