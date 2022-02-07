@@ -1,0 +1,28 @@
+﻿@page
+@model FoodEaterRecipes.Pages.ContactModel
+@{
+    ViewData["Title"] = "Contact";
+}
+
+<button id="contactUsButton">Contact Us!</button>
+<div id="contactUsForm">
+    <form>
+        <label>Your name:</label>
+        <br />
+        <input style="font-size: 18px; width: 200px;" />
+        <br />
+        <label>Email:</label>
+        <br />
+        <input type="email" />
+        <br />
+        <label>Subject:</label>
+        <br />
+        <input type="text" />
+        <br />
+        <label>Message:</label>
+        <br />
+        <textarea rows="4"></textarea>
+        <br />
+        <input type="submit" value="Send Message" />
+    </form>
+</div>
