@@ -1,5 +1,7 @@
 ﻿@{
     ViewData["Title"] = "About us";
 }
-
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
 <p>Nothing here yet...</p>

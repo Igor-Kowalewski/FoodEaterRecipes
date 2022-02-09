@@ -1,3 +1,4 @@
+using FoodEaterRecipes.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,9 +23,11 @@ namespace FoodEaterRecipes
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-               //.AddRazorRuntimeCompilation();
-            //services.AddRazorPages();
+            services.AddTransient<IMailService, EmptyMailService>();
+
+            services.AddControllersWithViews()
+               .AddRazorRuntimeCompilation();
+            services.AddRazorPages();
         }
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +48,7 @@ namespace FoodEaterRecipes
 
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapRazorPages();
+                endpoints.MapRazorPages();
 
                 endpoints.MapControllerRoute("Default",
                     "/{controller}/{action}/{id?}",

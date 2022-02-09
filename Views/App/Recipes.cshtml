@@ -1,6 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Recipes";
 }
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
 
 <div class="recipe-info">
     <img src="~/src/BlueberryOmlette.jpg" />

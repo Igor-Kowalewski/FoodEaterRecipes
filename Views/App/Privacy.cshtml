@@ -1,6 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
+
 <h1>@ViewData["Title"]</h1>
 
 <p>Strona Igora Kowalewskiego utworzona na potrzeby projektu do pracy licencjackiej w 2022 roku.</p>

@@ -1,26 +1,42 @@
-﻿@{
+﻿@model ContactMessage
+@{
     ViewData["Title"] = "Contact";
 }
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
+
 
 <button id="contactUsButton">Contact Us!</button>
 <div id="contactUsForm">
-    <form>
-        <label>Your name:</label>
+    <form method="post">
+        <div asp-validation-summary="ModelOnly"></div>
         <br />
-        <input style="font-size: 18px; width: 200px;" />
+        <!-- Thanks to below way of using TagHelpers on label we set focus to
+        input after clicking on input label - very good for mobile/touchscreens -->
+        <label asp-for="Name">Your name:</label>
         <br />
-        <label>Email:</label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
         <br />
-        <input type="email" />
+        <label asp-for="Email">Email:</label>
         <br />
-        <label>Subject:</label>
+        <input asp-for="Email" type="email" />
+        <span asp-validation-for="Email"></span>
         <br />
-        <input type="text" />
+        <label asp-for="Subject">Subject:</label>
         <br />
-        <label>Message:</label>
+        <input asp-for="Subject" type="text" />
+        <span asp-validation-for="Subject"></span>
         <br />
-        <textarea rows="4"></textarea>
+        <label asp-for="Message">Message:</label>
+        <br />
+        <textarea asp-for="Message" rows="4"></textarea>
+        <span asp-validation-for="Message"></span>
         <br />
         <input type="submit" value="Send Message" />
+        <div>@ViewBag.UserMessage</div>
     </form>
 </div>
