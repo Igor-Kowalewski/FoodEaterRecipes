@@ -4,8 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FoodEater - @ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/fortawesome/fontawesome-free/css/all.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -48,11 +49,38 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-light bg-dark">
-        <div class="d-flex justify-content-center align-items-center">
+    <div class="fixed-bottom">
+    <footer class="border-top bg-dark text-center text-white pt-1 pb-1">
+        <div class="container justify-content-center align-items-center">
+            <section class="ml-1 mr-1">
+                <a class="btn btn-link btn-floating btn-lg text-light"
+                   href="#!"
+                   role="button"
+                   data-mdb-ripple-color="dark">
+                    <i class="fab fa-facebook-square fa-1x"></i>
+                </a>
+
+                <a class="btn btn-link btn-floating btn-lg text-light"
+                   href="#!"
+                   role="button"
+                   data-mdb-ripple-color="dark">
+                    <i class="fab fa-twitter fa-1x"></i>
+                </a>
+
+                <a class="btn btn-link btn-floating btn-lg text-light"
+                   href="#!"
+                   role="button"
+                   data-mdb-ripple-color="dark">
+                    <i class="fab fa-instagram fa-1x"></i>
+                </a>
+            </section>
+        </div>
+            
+        <div class="container text-center text-light">
             &copy; 2022 - FoodEater -&nbsp;<a asp-controller="App" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    </div>
 
     @RenderSection("Scripts", required: false)
 </body>
