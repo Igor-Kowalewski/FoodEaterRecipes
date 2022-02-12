@@ -5,9 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using FoodEaterRecipes.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace FoodEaterRecipes
 {
@@ -23,6 +25,8 @@ namespace FoodEaterRecipes
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<FoodEaterContext>();
+
             services.AddTransient<IMailService, EmptyMailService>();
 
             services.AddControllersWithViews()

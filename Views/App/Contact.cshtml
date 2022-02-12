@@ -15,7 +15,7 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly"></div>
             <!-- Thanks to below way of using TagHelpers on label we set focus to
-    input after clicking on input label - very good for mobile/touchscreens -->
+            input after clicking on input label - very good for mobile/touchscreens -->
             <div class="form-group">
                 <label asp-for="Name">Your name:</label>
                 <input asp-for="Name" class="form-control" />
@@ -40,6 +40,6 @@
                 <button type="submit" class="btn btn-dark"><a class="fas fa-envelope fa-1x"></a> Send Message</button>
                 <div class="text-success">@ViewBag.UserMessage</div>
             </div>
-</form>
+        </form>
     </div>
 </div>
