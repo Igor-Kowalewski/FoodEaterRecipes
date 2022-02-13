@@ -18,17 +18,32 @@ namespace FoodEaterRecipes.Data
         }
 
         public DbSet<Ingredient> Ingredients { get; set; }
-        public DbSet<IngredientCategory> IngredientCategory { get; set; }
-        public DbSet<Recipe> Recipe { get; set; }
-        public DbSet<RecipeIngredient> RecipeIngredient { get; set; }
-        public DbSet<User> User { get; set; }
-        public DbSet<UserGroup> UserGroup { get; set; }
+        public DbSet<IngredientCategory> IngredientCategories { get; set; }
+        public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserGroup> UserGroups { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
 
             optionsBuilder.UseSqlServer(_config["ConnectionStrings:FoodEaterDB"]);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasOne(a => a.Ingredient)
+                .WithMany(a => a.RecipeIngredient)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasOne(a => a.Recipe)
+                .WithMany(a => a.RecipeIngredient)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FoodEaterRecipes.Migrations
 {
-    public partial class InitialDB : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace FoodEaterRecipes.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     UpdateDT = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreateDT = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -28,7 +28,7 @@ namespace FoodEaterRecipes.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     UpdateDT = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreateDT = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -43,22 +43,22 @@ namespace FoodEaterRecipes.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(100)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     UpdateDT = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreateDT = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserGroupId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User_UserGroups_UserGroupId",
+                        name: "FK_Users_UserGroups_UserGroupId",
                         column: x => x.UserGroupId,
                         principalTable: "UserGroups",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,7 +67,7 @@ namespace FoodEaterRecipes.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Carbohydrates = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Proteins = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Fats = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -84,13 +84,13 @@ namespace FoodEaterRecipes.Migrations
                         column: x => x.IngredientCategoryId,
                         principalTable: "IngredientCategories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Ingredients_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,21 +99,21 @@ namespace FoodEaterRecipes.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", maxLength: 10000, nullable: false),
                     UpdateDT = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreateDT = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Recipe", x => x.Id);
+                    table.PrimaryKey("PK_Recipes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Recipe_User_UserId",
+                        name: "FK_Recipes_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -135,13 +135,13 @@ namespace FoodEaterRecipes.Migrations
                         column: x => x.IngredientId,
                         principalTable: "Ingredients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_RecipeIngredients_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -155,11 +155,6 @@ namespace FoodEaterRecipes.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Recipes_UserId",
-                table: "Recipes",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RecipeIngredients_IngredientId",
                 table: "RecipeIngredients",
                 column: "IngredientId");
@@ -168,6 +163,11 @@ namespace FoodEaterRecipes.Migrations
                 name: "IX_RecipeIngredients_RecipeId",
                 table: "RecipeIngredients",
                 column: "RecipeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Recipes_UserId",
+                table: "Recipes",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_UserGroupId",

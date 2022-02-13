@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FoodEaterRecipes.Data.Entities
 {
+    [Table("UserGroups")]
     public class UserGroup
     {
+        [Key]
         public int Id { get; set; }
+        [Required]
+        [MaxLength(100)]
         public string Name { get; set; }
+        [Required]
         public DateTime UpdateDT { get; set; }
+        [Required]
         public DateTime CreateDT { get; set; }
-        public ICollection<User> User { get; set; } // Required FK in User
+        public ICollection<User> User { get; set; }
     }
 }

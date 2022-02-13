@@ -4,16 +4,14 @@ using FoodEaterRecipes.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FoodEaterRecipes.Migrations
 {
     [DbContext(typeof(FoodEaterContext))]
-    [Migration("20220213130614_InitialDB")]
-    partial class InitialDB
+    partial class FoodEaterContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,11 +35,13 @@ namespace FoodEaterRecipes.Migrations
                     b.Property<decimal>("Fats")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("IngredientCategoryId")
+                    b.Property<int>("IngredientCategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("Proteins")
                         .HasColumnType("decimal(18,2)");
@@ -49,7 +49,7 @@ namespace FoodEaterRecipes.Migrations
                     b.Property<DateTime>("UpdateDT")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -72,14 +72,16 @@ namespace FoodEaterRecipes.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("UpdateDT")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("IngredientCategory");
+                    b.ToTable("IngredientCategories");
                 });
 
             modelBuilder.Entity("FoodEaterRecipes.Data.Entities.Recipe", b =>
@@ -93,22 +95,26 @@ namespace FoodEaterRecipes.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(10000)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("UpdateDT")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Recipe");
+                    b.ToTable("Recipes");
                 });
 
             modelBuilder.Entity("FoodEaterRecipes.Data.Entities.RecipeIngredient", b =>
@@ -134,10 +140,9 @@ namespace FoodEaterRecipes.Migrations
 
                     b.HasIndex("IngredientId");
 
-                    b.HasIndex("RecipeId")
-                        .IsUnique();
+                    b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeIngredient");
+                    b.ToTable("RecipeIngredients");
                 });
 
             modelBuilder.Entity("FoodEaterRecipes.Data.Entities.User", b =>
@@ -151,25 +156,31 @@ namespace FoodEaterRecipes.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("UpdateDT")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserGroupId")
+                    b.Property<int>("UserGroupId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserGroupId");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("FoodEaterRecipes.Data.Entities.UserGroup", b =>
@@ -183,25 +194,31 @@ namespace FoodEaterRecipes.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("UpdateDT")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserGroup");
+                    b.ToTable("UserGroups");
                 });
 
             modelBuilder.Entity("FoodEaterRecipes.Data.Entities.Ingredient", b =>
                 {
                     b.HasOne("FoodEaterRecipes.Data.Entities.IngredientCategory", "IngredientCategory")
                         .WithMany("Ingredient")
-                        .HasForeignKey("IngredientCategoryId");
+                        .HasForeignKey("IngredientCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("FoodEaterRecipes.Data.Entities.User", "User")
                         .WithMany("Ingredient")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("IngredientCategory");
 
@@ -210,9 +227,13 @@ namespace FoodEaterRecipes.Migrations
 
             modelBuilder.Entity("FoodEaterRecipes.Data.Entities.Recipe", b =>
                 {
-                    b.HasOne("FoodEaterRecipes.Data.Entities.User", null)
+                    b.HasOne("FoodEaterRecipes.Data.Entities.User", "User")
                         .WithMany("Recipe")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FoodEaterRecipes.Data.Entities.RecipeIngredient", b =>
@@ -220,13 +241,13 @@ namespace FoodEaterRecipes.Migrations
                     b.HasOne("FoodEaterRecipes.Data.Entities.Ingredient", "Ingredient")
                         .WithMany("RecipeIngredient")
                         .HasForeignKey("IngredientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("FoodEaterRecipes.Data.Entities.Recipe", "Recipe")
-                        .WithOne("RecipeIngredient")
-                        .HasForeignKey("FoodEaterRecipes.Data.Entities.RecipeIngredient", "RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("RecipeIngredient")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Ingredient");
@@ -238,7 +259,9 @@ namespace FoodEaterRecipes.Migrations
                 {
                     b.HasOne("FoodEaterRecipes.Data.Entities.UserGroup", "UserGroup")
                         .WithMany("User")
-                        .HasForeignKey("UserGroupId");
+                        .HasForeignKey("UserGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("UserGroup");
                 });

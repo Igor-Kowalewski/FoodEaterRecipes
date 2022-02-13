@@ -1,9 +1,22 @@
-﻿@{
+﻿@model IEnumerable<IngredientCategory>
+@{
     ViewData["Title"] = "Recipes";
 }
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
+
+
+<h1>All ingredients!</h1>
+<h4>@Model.Count()</h4>
+
+<ol>
+    @foreach (var r in Model)
+    {
+        <li>@r.Name</li>
+    }
+</ol>
+
 
 <div class="recipe-info">
     <img src="~/src/BlueberryOmlette.jpg" />
