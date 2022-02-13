@@ -1,5 +1,6 @@
 ﻿using FoodEaterRecipes.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,17 @@ namespace FoodEaterRecipes.Data
 {
     public class FoodEaterContext : DbContext
     {
+        private readonly IConfiguration _config;
+
+        public FoodEaterContext(IConfiguration config)
+        {
+            _config = config;
+        }
+
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<IngredientCategory> IngredientCategory { get; set; }
         public DbSet<Recipe> Recipe { get; set; }
+        public DbSet<RecipeIngredient> RecipeIngredient { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<UserGroup> UserGroup { get; set; }
 
@@ -19,7 +28,7 @@ namespace FoodEaterRecipes.Data
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.UseSqlServer();
+            optionsBuilder.UseSqlServer(_config["ConnectionStrings:FoodEaterDB"]);
         }
     }
 }

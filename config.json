@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "FoodEaterDB": "Data Source=DESKTOP-CPCQ6Q4\\SQLEXPRESS;Initial Catalog=FoodEaterDB;Integrated Security=True;Connect Timeout=30;MultipleActiveResultSets = true;"
+  }
+}
