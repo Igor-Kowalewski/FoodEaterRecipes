@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IngredientCategory>
+﻿@model IEnumerable<Recipe>
 @{
     ViewData["Title"] = "Recipes";
 }
@@ -6,29 +6,26 @@
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
 
-
-<h1>All ingredients!</h1>
+<h1>All saved Recipes!</h1>
 <h4>@Model.Count()</h4>
 
-<ol>
+<div class="row">
     @foreach (var r in Model)
     {
-        <li>@r.Name</li>
+        <div class="card card-body col-md-3 recipe-info p-1 m-1 bg-dark text-white rounded p-2">
+            <img src="~/src/@(r.Id).jpg" class="img-fluid rounded" alt="@r.Name"/>
+            <h3>@r.Name</h3>
+            <ul class="list-group list-unstyled recipe-props">
+                <li class="list-item">@r.Name</li>
+                <li class="list-item">@r.Description</li>
+                <li class="list-item">@r.CreateDT</li>
+            </ul>
+            <div class="position-absolute bottom-center">
+                <button type="button" class="btn btn-dark">See details!</button>
+            </div>
+        </div>
     }
-</ol>
-
-
-<div class="recipe-info">
-    <img src="~/src/BlueberryOmlette.jpg" />
-    <h3>Blueberry Omlette</h3>
-    <ul class="recipe-props">
-        <li>Daily Average Requirements per portion</li>
-        <li>400 kcal</li>
-        <li>Carbohydrates: 40%</li>
-        <li>Proteins: 32%</li>
-        <li>Fiber: 51%</li>
-        <li>Fats LA (Omega-6): 21%</li>
-        <li>Fats ALA (Omega-3): 20%</li>
-    </ul>
-    <button class="btn btn-dark">See details!</button>
 </div>
+
+
+

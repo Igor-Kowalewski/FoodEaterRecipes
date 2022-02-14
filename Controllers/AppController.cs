@@ -12,12 +12,12 @@ namespace FoodEaterRecipes.Controllers
     public class AppController : Controller
     {
         private readonly IMailService _mailService;
-        private readonly FoodEaterContext _context;
+        private readonly IFoodEaterRepository _repository;
 
-        public AppController(IMailService mailService, FoodEaterContext context)
+        public AppController(IMailService mailService, IFoodEaterRepository repository)
         {
             _mailService = mailService;
-            _context = context;
+            _repository = repository;
         }
 
         public IActionResult Index()
@@ -29,11 +29,7 @@ namespace FoodEaterRecipes.Controllers
         [HttpGet("Recipes")]
         public IActionResult Recipes()
         {
-            var results = _context.IngredientCategories
-                .OrderBy( p => p.Id )
-                .ToList();
-
-            return View(results);
+            return View(_repository.GetAllRecipes());
         }
 
 

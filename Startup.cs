@@ -29,6 +29,8 @@ namespace FoodEaterRecipes
 
             services.AddTransient<IMailService, EmptyMailService>();
 
+            services.AddScoped<IFoodEaterRepository, FoodEaterRepository>();
+
             services.AddControllersWithViews()
                .AddRazorRuntimeCompilation();
             services.AddRazorPages();
