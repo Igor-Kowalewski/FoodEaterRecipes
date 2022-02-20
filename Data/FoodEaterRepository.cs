@@ -24,9 +24,19 @@ namespace FoodEaterRecipes.Data
 
             try
             {
-                return _context.Recipes
+                var result = (IEnumerable<Recipe>)_context.Recipes
                                 .OrderBy(r => r.Name)
                                 .ToList();
+
+                foreach ( var recipe in result )
+                {
+                    if (recipe.Description.Length > 100)
+                    {
+                        recipe.Description = recipe.Description.Substring(0,97).Trim() + "...";
+                    }
+                }
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -60,5 +70,6 @@ namespace FoodEaterRecipes.Data
         {
             return _context.SaveChanges() > 0;
         }
+
     }
 }

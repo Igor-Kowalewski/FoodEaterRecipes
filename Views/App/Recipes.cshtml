@@ -6,26 +6,19 @@
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
 
-<h1>All saved Recipes!</h1>
-<h4>@Model.Count()</h4>
-
 <div class="row">
     @foreach (var r in Model)
     {
-        <div class="card card-body col-md-3 recipe-info p-1 m-1 bg-dark text-white rounded p-2">
-            <img src="~/src/@(r.Id).jpg" class="img-fluid rounded" alt="@r.Name"/>
-            <h3>@r.Name</h3>
-            <ul class="list-group list-unstyled recipe-props">
-                <li class="list-item">@r.Name</li>
-                <li class="list-item">@r.Description</li>
-                <li class="list-item">@r.CreateDT</li>
-            </ul>
-            <div class="position-absolute bottom-center">
-                <button type="button" class="btn btn-dark">See details!</button>
+        <div class="card col-md-3 recipe-info m-1 p-0 bg-dark text-white">
+            <img class="card-img-top img-fluid text-center" style=" width: 100%; max-height: 400px; object-fit: cover;" src="~/src/@(r.Id).jpg" alt="@r.Name"/>
+            <div class="card-body text-center">
+                <h4 class="card-title text-left">@r.Name</h4>
+                <p class="card-text text-left">@r.Description</p>
             </div>
+            
+            <a href="#" class="card-footer btn btn-outline-info border-secondary border-left-0 border-right-0 rounded-0">See this recipe!</a>
+            <div class="card-footer text-center text-muted"><small>Last updated: @r.UpdateDT</small></div>
         </div>
     }
 </div>
-
-
 
