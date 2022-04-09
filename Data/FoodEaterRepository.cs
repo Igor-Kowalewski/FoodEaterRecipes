@@ -45,6 +45,36 @@ namespace FoodEaterRecipes.Data
             }
         }
 
+        public IEnumerable<Recipe> SearchByNameSuggestions(string Name)
+        {
+            _logger.Log(LogLevel.Information, "SearchByNameSuggestions was called");
+
+            try
+            {
+                IEnumerable<Recipe> result;
+                if ( Name == null )
+                {
+                    result = _context.Recipes
+                                    .OrderBy(r => r.Name)
+                                    .ToList();
+                } 
+                else
+                {
+                    result = _context.Recipes
+                                    .Where(r => r.Name.Contains(Name))
+                                    .OrderBy(r => r.Name)
+                                    .ToList();
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to GetAllRecipes: {ex}");
+                return null;
+            }
+        }
+
         public IEnumerable<Ingredient> GetIngredientsByCategory(string category)
         {
             _logger.Log(LogLevel.Information, "GetIngredientsByCategory was called");
@@ -70,6 +100,5 @@ namespace FoodEaterRecipes.Data
         {
             return _context.SaveChanges() > 0;
         }
-
     }
 }

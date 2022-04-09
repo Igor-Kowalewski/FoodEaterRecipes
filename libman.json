@@ -179,6 +179,36 @@
         "css/v4-shims.css",
         "css/v4-shims.min.css"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jqueryui@1.12.1",
+      "destination": "wwwroot/lib/jqueryui/",
+      "files": [
+        "jquery-ui.theme.min.css",
+        "jquery-ui.theme.css",
+        "jquery-ui.structure.min.css",
+        "jquery-ui.structure.css",
+        "jquery-ui.min.js",
+        "jquery-ui.min.css",
+        "jquery-ui.js",
+        "jquery-ui.css",
+        "themes/smoothness/jquery-ui.css",
+        "themes/smoothness/jquery-ui.min.css",
+        "themes/smoothness/theme.css",
+        "themes/smoothness/theme.min.css",
+        "themes/smoothness/images/ui-bg_glass_55_fbf9ee_1x400.png",
+        "themes/smoothness/images/ui-bg_glass_65_ffffff_1x400.png",
+        "themes/smoothness/images/ui-bg_glass_75_dadada_1x400.png",
+        "themes/smoothness/images/ui-bg_glass_75_e6e6e6_1x400.png",
+        "themes/smoothness/images/ui-bg_glass_95_fef1ec_1x400.png",
+        "themes/smoothness/images/ui-bg_highlight-soft_75_cccccc_1x100.png",
+        "themes/smoothness/images/ui-icons_222222_256x240.png",
+        "themes/smoothness/images/ui-icons_2e83ff_256x240.png",
+        "themes/smoothness/images/ui-icons_454545_256x240.png",
+        "themes/smoothness/images/ui-icons_888888_256x240.png",
+        "themes/smoothness/images/ui-icons_cd0a0a_256x240.png"
+      ]
     }
   ]
 }

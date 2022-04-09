@@ -6,6 +6,7 @@ namespace FoodEaterRecipes.Data
     public interface IFoodEaterRepository
     {
         IEnumerable<Recipe> GetAllRecipes();
+        IEnumerable<Recipe> SearchByNameSuggestions(string Name);
         IEnumerable<Ingredient> GetIngredientsByCategory(string category);
         bool SaveAll();
     }

@@ -2,6 +2,7 @@
 using FoodEaterRecipes.Models;
 using FoodEaterRecipes.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -32,15 +33,16 @@ namespace FoodEaterRecipes.Controllers
         [HttpGet("Recipes")]
         public IActionResult Recipes()
         {
-            return View(_repository.GetAllRecipes());
+            ViewData["Recipes"] = new SelectList(_repository.GetAllRecipes(), "Id", "Name");
+            ViewBag.SearchResultRecipes = _repository.GetAllRecipes();
+            return View();
         }
 
-
-        //[HttpGet("About")]
-        //public IActionResult AboutUs()
-        //{
-        //    return View();
-        //}
+        [HttpPost("Recipes")]
+        public JsonResult Recipes(string Prefix)
+        {
+            return Json(_repository.SearchByNameSuggestions(Prefix));
+        }
 
 
         [HttpGet("About")]

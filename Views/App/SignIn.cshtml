@@ -7,26 +7,30 @@
 
 
 <div>
-    <div class="container">
-        <button class="btn btn-dark" id="loginToggle">Login</button>
-    </div>
-    <div class="container">
-        <form class="popup-form">
-            <div>
-                <label>Username:</label>
-                <input />
+    @*<div class="container">
+            <button class="btn btn-dark" id="loginToggle">Login</button>
+        </div>*@
+    <div class="col-md-6 offset-md-3" id="loginForm">
+        <div class="card card-body bg-dark text-light">
+            <div class="container">
+                <form method="get" class="popup-form">
+                    <div class="form-group">
+                        <label>Username:</label>
+                        <input class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <input class="form-control" type="password" />
+                    </div>
+                    <div class="form-group">
+                        <label>Remember me?</label>
+                        <input type="checkbox" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-dark"><a class="fas fa-sign-in-alt" fa-1x"></a> Login</button>
+                    </div>
+                </form>
             </div>
-            <div>
-                <label>Password:</label>
-                <input type="password" />
-            </div>
-            <div>
-                <input type="checkbox" />
-                <label>Remember me?</label>
-            </div>
-            <div>
-                <input class="btn btn-dark" type="submit" value="login" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>

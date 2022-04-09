@@ -3,13 +3,11 @@
     ViewData["Title"] = "Contact";
 }
 @section Scripts {
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
 
 
-<button class="btn btn-dark" id="contactUsButton">Contact Us!</button>
+<!--<button class="btn btn-dark" id="contactUsButton">Contact Us!</button>-->
 <div class="col-md-6 offset-md-3" id="contactUsForm">
     <div class="card card-body bg-dark text-light">
         <form method="post">

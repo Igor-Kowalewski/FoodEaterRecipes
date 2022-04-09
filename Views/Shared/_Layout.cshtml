@@ -8,79 +8,79 @@
     <link href="~/lib/fortawesome/fontawesome-free/css/all.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
 </head>
-<body>
+<body class="bg-secondary">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3 ">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom border-dark box-shadow mb-3 shadow">
             <div class="container">
-                <button class="navbar-toggler" 
-                        type="button" 
-                        data-toggle="collapse" 
-                        data-target=".navbar-collapse" 
+                <button class="navbar-toggler"
+                        type="button"
+                        data-toggle="collapse"
+                        data-target=".navbar-collapse"
                         aria-controls="navbarSupportedContent"
-                        aria-expanded="false" 
+                        aria-expanded="false"
                         aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        <li id ="HomeNav" class="nav-item">
+                        <li id="HomeNav" class="nav-item">
                             <a class="nav-link text-light" asp-controller="App" asp-action="Index">Home</a>
                         </li>
-                        <li id ="RecipesNav" class="nav-item">
+                        <li id="RecipesNav" class="nav-item">
                             <a class="nav-link text-light" asp-controller="App" asp-action="Recipes">Recipes</a>
                         </li>
-                        <li id ="AboutNav" class="nav-item">
+                        <li id="AboutNav" class="nav-item">
                             <a class="nav-link text-light" asp-controller="App" asp-action="AboutUs">About us</a>
                         </li>
-                        <li id ="ContactNav" class="nav-item">
+                        <li id="ContactNav" class="nav-item">
                             <a class="nav-link text-light" asp-controller="App" asp-action="Contact">Contact</a>
                         </li>
-                        <li id ="SignNav" class="nav-item">
+                        <li id="SignNav" class="nav-item">
                             <a class="nav-link text-light" asp-controller="App" asp-action="SignIn">Sign in</a>
-                        </li>                        
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container">
+    <div class="container text-white">
         <main role="main" class="p-0 m-0">
             @RenderBody()
         </main>
     </div>
 
-    <div class="fixed-bottom">
-    <footer class="border-top bg-dark text-center text-white pt-1 pb-1">
-        <div class="container justify-content-center align-items-center">
-            <section class="ml-1 mr-1">
-                <a class="btn btn-link btn-floating btn-lg text-light"
-                   href="#!"
-                   role="button"
-                   data-mdb-ripple-color="dark">
-                    <i class="fab fa-facebook-square fa-1x"></i>
-                </a>
+    <div class="fixed-bottom border-top border-dark bg-dark text-center">
+        <footer>
+            <div class="container">
+                <section>
+                    <a class="btn btn-dark text-muted"
+                       href="#!"
+                       role="button"
+                       data-mdb-ripple-color="dark">
+                        <i class="fab fa-facebook-square fa-1x"></i>
+                    </a>
 
-                <a class="btn btn-link btn-floating btn-lg text-light"
-                   href="#!"
-                   role="button"
-                   data-mdb-ripple-color="dark">
-                    <i class="fab fa-twitter fa-1x"></i>
-                </a>
+                    <a class="btn btn-dark text-muted"
+                       href="#!"
+                       role="button"
+                       data-mdb-ripple-color="dark">
+                        <i class="fab fa-twitter fa-1x"></i>
+                    </a>
 
-                <a class="btn btn-link btn-floating btn-lg text-light"
-                   href="#!"
-                   role="button"
-                   data-mdb-ripple-color="dark">
-                    <i class="fab fa-instagram fa-1x"></i>
-                </a>
-            </section>
-        </div>
-            
-        <div class="container text-center text-light">
-            &copy; 2022 - FoodEater -&nbsp;<a asp-controller="App" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+                    <a class="btn btn-dark text-muted"
+                       href="#!"
+                       role="button"
+                       data-mdb-ripple-color="dark">
+                        <i class="fab fa-instagram fa-1x"></i>
+                    </a>
+                </section>
+            </div>
+
+            <div class="container text-muted">
+                <small>&copy; 2022 - FoodEater -&nbsp;<a asp-controller="App" asp-action="Privacy">Privacy</a></small>
+            </div>
+        </footer>
     </div>
 
     @RenderSection("Scripts", required: false)
