@@ -1,28 +1,9 @@
-﻿@model FoodEaterRecipes.Models.IngredientsSearchAPI
-@{
+﻿@{
     ViewData["Title"] = "About us";
 }
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
 }
 
-<div class="form-horizontal">
-    <hr />
-    <div class="form-group">
-        <table class="table table-responsive" style="width:400px">
-            <tr>
-                <th>
-                    @Html.DisplayName("Name")
-                </th>
-            </tr>
-            @foreach (var item in Model.Common)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Food_name)
-                    </td>
-                </tr>
-            }
-        </table>
-    </div>
-</div>
+
