@@ -3,13 +3,9 @@ using FoodEaterRecipes.Models;
 using FoodEaterRecipes.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -22,7 +18,6 @@ namespace FoodEaterRecipes.Controllers
         private readonly IFoodEaterRepository _repository;
         private readonly IWebHostEnvironment _environment;
 
-
         public AppController(IMailService mailService, IFoodEaterRepository repository, IWebHostEnvironment environment)
         {
             _mailService = mailService;
@@ -30,23 +25,20 @@ namespace FoodEaterRecipes.Controllers
             _environment = environment;
         }
 
-
         public IActionResult Index()
         {
             return View();
         }
 
-
         [HttpGet("Recipes")]
         public IActionResult Recipes()
         {
-            ViewData["Recipes"] = new SelectList(_repository.GetAllRecipes(), "Id", "Name");
+            //ViewData["Recipes"] = new SelectList(_repository.GetAllRecipes(), "Id", "Name");
             ViewBag.SearchResultRecipes = _repository.GetAllRecipes();
             ViewBag.AbsolutePath = _environment.WebRootPath + $"\\src\\";
 
             return View();
         }
-
 
         [HttpPost("Recipes")]
         public JsonResult Recipes(string Prefix)
@@ -54,63 +46,26 @@ namespace FoodEaterRecipes.Controllers
             return Json(_repository.SearchByNameSuggestions(Prefix));
         }
 
-
         [HttpGet("Create")]
-        public async Task<ActionResult> Create()
-        {
-
-            // WYŁĄCZAM TO LISTOWANIE PRZY URUCHAMIANIU FUNKCJONALNOSCI
-            //string Baseurl = "https://trackapi.nutritionix.com/";
-            //IngredientsSearchAPI ResultList = new();
-
-            //using (HttpClient client = new())
-            //{
-            //    //Passing service base url
-            //    client.BaseAddress = new Uri(Baseurl);
-            //    client.DefaultRequestHeaders.Clear();
-
-            //    //Define request data format
-            //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            //    client.DefaultRequestHeaders.Add("x-app-id", "551bc1ca");
-            //    client.DefaultRequestHeaders.Add("x-app-key", "7e6ed04c9d8c38bc4b7052fbdecf188c");
-
-            //    //Sending request to find web api REST service resource GetAllEmployees using HttpClient
-            //    HttpResponseMessage Res = await client.GetAsync("v2/search/instant?query=white bean");
-
-            //    //Checking the response is successful or not which is sent using HttpClient
-            //    if (Res.IsSuccessStatusCode)
-            //    {
-            //        //Storing the response details recieved from web api
-            //        var ResultResponse = Res.Content.ReadAsStringAsync().Result;
-
-            //        //Deserializing the response recieved from web api and storing into the Employee list
-            //        ResultList = JsonConvert.DeserializeObject<IngredientsSearchAPI>(ResultResponse);
-            //        //returning the list to view
-
-            //        return View(ResultList);
-            //    }
-
-            //}
-            
+        public IActionResult Create()
+        {  
             return View();
         }
 
-
-        [HttpPost("Create")]
-        public JsonResult Create(string Prefix)
+        [HttpGet("api/Ingredients")]
+        public JsonResult Ingredients(string Prefix)
         {
-
             var APIrequestTask = GetIngridientsFromAPI(Prefix);
             APIrequestTask.Wait();
-            List<string> ingredientList = APIrequestTask.Result;
+            List<IngredientCompositionDTO> ingredientList = APIrequestTask.Result;
 
             return Json(ingredientList);
         }
 
-        private async Task<List<string>> GetIngridientsFromAPI(string Prefix)
+        private static async Task<List<IngredientCompositionDTO>> GetIngridientsFromAPI(string Prefix)
         {
-            List<string> response = new();
-            IngredientsSearchAPI ResultList = new IngredientsSearchAPI();
+            List<IngredientCompositionDTO> response = new();
+            IngredientDTO ResultList;
             string Baseurl = "https://trackapi.nutritionix.com/";
 
             using (HttpClient client = new())
@@ -125,7 +80,7 @@ namespace FoodEaterRecipes.Controllers
                 client.DefaultRequestHeaders.Add("x-app-key", "7e6ed04c9d8c38bc4b7052fbdecf188c");
 
                 //Sending request to find web api REST service resource GetAllEmployees using HttpClient
-                HttpResponseMessage Res = await client.GetAsync($"v2/search/instant?query={Prefix}");
+                HttpResponseMessage Res = await client.GetAsync($"v2/search/instant?query={Prefix}&detailed=true&branded=false");
 
                 //Checking the response is successful or not which is sent using HttpClient
                 if (Res.IsSuccessStatusCode)
@@ -134,11 +89,41 @@ namespace FoodEaterRecipes.Controllers
                     var ResultResponse = Res.Content.ReadAsStringAsync().Result;
 
                     //Deserializing the response recieved from web api and storing into the Employee list
-                    ResultList = JsonConvert.DeserializeObject<IngredientsSearchAPI>(ResultResponse);
+                    ResultList = JsonConvert.DeserializeObject<IngredientDTO>(ResultResponse);
 
-                    foreach(var c in ResultList.Common)
+                    // Dictionary (Carefull for serving weight - it is not 100g):
+                    // 208 Kcal
+                    // 205 Carbohydrates
+                    // 204 Fats
+                    // 203 Proteins
+                    foreach (var c in ResultList.Common)
                     {
-                        response.Add(c.Food_name);
+                        IngredientCompositionDTO ingredient = new();
+
+                        foreach ( var n in c.Full_nutrients )
+                        {
+                            ingredient.Name = c.Food_name;
+
+                            switch (n.Attr_id)
+                            {
+                                case 208:
+                                    ingredient.Kcal = n.Value / c.Serving_weight_grams * 100;
+                                    break;
+                                case 205:
+                                    ingredient.Carbs = n.Value / c.Serving_weight_grams * 100;
+                                    break;
+                                case 204:
+                                    ingredient.Fats = n.Value / c.Serving_weight_grams * 100;
+                                    break;
+                                case 203:
+                                    ingredient.Proteins = n.Value / c.Serving_weight_grams * 100;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+
+                        response.Add(ingredient);
                     }
                 }
             }

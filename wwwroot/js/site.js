@@ -1,8 +1,5 @@
 ﻿
 $(document).ready(function () {
-
-    console.log("Hello Foodeater!");
-
     //var contactUsForm = $("#contactUsForm");
     //contactUsForm.hide();
 
@@ -18,11 +15,14 @@ $(document).ready(function () {
     //    popupForm.fadeToggle(500);
     //});
 
+
     var productInfo = $(".recipe-info li");
     productInfo.on("click", function () {
         console.log("User clicked on " + $(this).text());
     });
 
+
+    /// WYSZUKIWANIE PRZEPISÓW PO NAZWIE - BAZA DANYCH SQL
     var SearchInputRecipes = $("#SearchInputRecipes");
     SearchInputRecipes.on("input", function () {
 
@@ -53,22 +53,25 @@ $(document).ready(function () {
     });
 
 
+    /// WYSZUKIWANIE SKŁADNIKÓW PO NAZWIE - ZEWNĘTRZNE API
+    var SearchIngredientResult = []
     var SearchInputIngredient = $("#SearchInputIngredient");
     SearchInputIngredient.on("input", function () {
 
         console.log("User typing...");
+        while(SearchIngredientResult.length) { SearchIngredientResult.pop(); }
 
         SearchInputIngredient.autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: "/Create",
-                    type: "POST",
+                    url: "api/Ingredients",
+                    type: "GET",
                     dataType: "json",
                     data: { Prefix: request.term },
                     success: function (data) {
                         response($.map(data, function (value) {
-                            console.log(value);
-                            return { label: value, value: value };
+                            SearchIngredientResult.push(value);
+                            return { label: value.name, value: value.name }; /// w json musi być z małej litery!!!
                         }))
                     }
                 })
@@ -80,5 +83,28 @@ $(document).ready(function () {
                 }
             }
         });
+
+        console.log(SearchIngredientResult);
+
+    });
+
+
+    /// UZUPEŁNIANIE FORMULARZA DODANIA KOLEJNEGO SKŁADNIKA PO NACIŚNIĘCIU BUTTONA
+    var addIngredientBtn = $("#addIngredientBtn");
+    addIngredientBtn.on("click", function () {
+
+        /// pobieram składnik
+        var ingredient = SearchIngredientResult.find(ingredient => ingredient.name === $('#SearchInputIngredient').val());
+
+        if (ingredient) {
+            /// czyszczę tablicę wyników po pobraniu
+            while (SearchIngredientResult.length) { SearchIngredientResult.pop(); }
+
+            /// czyszczę pole input
+            $('#SearchInputIngredient').val("");
+
+            /// podmieniam wartości w formularzu?
+            $('#ingredientAdded').text(ingredient.name);
+        }
     });
 });
