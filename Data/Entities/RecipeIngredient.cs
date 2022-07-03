@@ -13,6 +13,8 @@ namespace FoodEaterRecipes.Data.Entities
         [Key]
         public int Id { get; set; }
         [Required]
+        public int IngredientWeight { get; set; }
+        [Required]
         public DateTime UpdateDT { get; set; }
         [Required]
         public DateTime CreateDT { get; set; }

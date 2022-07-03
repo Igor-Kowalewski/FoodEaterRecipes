@@ -14,13 +14,17 @@
         <div class="col p-1 m-0 d-inline-block text-dark">
             @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control p-2 m-0", @id = "SearchInputIngredient", @placeholder = "Search..." } })
         </div>
-        
+
         <div class="col col-2 col-md-1 p-1 m-0 d-inline-block">
             <button class="btn btn-light btn-block" id="addIngredientBtn"><i class="fas fa-plus fa-1x"></i> </button>
         </div>
 
-        <div class="col col-12 col-md-6 p-1 m-0 d-inline-block text-center">
-            <p class="p-0 m-0 bg-dark rounded" id="ingredientAdded" style="height: 38px;">Testowy div!</p>     
+        <div class="col col-12 col-md-6 p-1 m-0 d-inline-block text-center bg-dark rounded">
+            <p class="p-0 m-0" id="ingredientAdded" style="height: 38px;">Testowy div!</p>
+            <p>{{ 2 + 3 + 4 }}</p>
+
+            @{ await Html.RenderPartialAsync("_CreateRecipeForm"); }
+
         </div>
     </div>
 </div>

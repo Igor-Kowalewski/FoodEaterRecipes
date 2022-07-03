@@ -1,6 +1,8 @@
 ﻿using FoodEaterRecipes.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FoodEaterRecipes.Data
 {
-    public class FoodEaterContext : DbContext
+    public class FoodEaterContext : IdentityDbContext<User>
     {
         private readonly IConfiguration _config;
 
@@ -21,8 +23,6 @@ namespace FoodEaterRecipes.Data
         public DbSet<IngredientCategory> IngredientCategories { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserGroup> UserGroups { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

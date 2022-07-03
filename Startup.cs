@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using FoodEaterRecipes.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace FoodEaterRecipes
 {
@@ -25,7 +27,15 @@ namespace FoodEaterRecipes
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentity<User, IdentityRole>( cfg =>
+            {
+                cfg.User.RequireUniqueEmail = true;
+                cfg.Password.RequireDigit = false;
+            }).AddEntityFrameworkStores<FoodEaterContext>();
+            
             services.AddDbContext<FoodEaterContext>();
+
+            services.AddTransient<FoodEaterSeeder>();
 
             services.AddTransient<IMailService, EmptyMailService>();
 
@@ -51,6 +61,9 @@ namespace FoodEaterRecipes
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

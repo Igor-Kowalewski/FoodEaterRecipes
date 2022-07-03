@@ -1,8 +1,11 @@
 ﻿using FoodEaterRecipes.Data;
+using FoodEaterRecipes.Data.Entities;
 using FoodEaterRecipes.Models;
 using FoodEaterRecipes.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -34,8 +37,13 @@ namespace FoodEaterRecipes.Controllers
         public IActionResult Recipes()
         {
             //ViewData["Recipes"] = new SelectList(_repository.GetAllRecipes(), "Id", "Name");
-            ViewBag.SearchResultRecipes = _repository.GetAllRecipes();
-            ViewBag.AbsolutePath = _environment.WebRootPath + $"\\src\\";
+            
+            IEnumerable<Recipe> response = _repository.GetAllRecipes();
+            if (response != null && response.GetEnumerator().MoveNext())
+            {
+                ViewBag.SearchResultRecipes = _repository.GetAllRecipes();
+                ViewBag.AbsolutePath = _environment.WebRootPath + $"\\src\\";
+            }
 
             return View();
         }
@@ -46,11 +54,6 @@ namespace FoodEaterRecipes.Controllers
             return Json(_repository.SearchByNameSuggestions(Prefix));
         }
 
-        [HttpGet("Create")]
-        public IActionResult Create()
-        {  
-            return View();
-        }
 
         [HttpGet("api/Ingredients")]
         public JsonResult Ingredients(string Prefix)
@@ -129,6 +132,39 @@ namespace FoodEaterRecipes.Controllers
             }
 
             return response;
+        }
+
+
+        [HttpGet("Recipe/{id}")]
+        public IActionResult Recipe(int id)
+        {
+            return View(id);
+        }
+
+
+        [Authorize]
+        [HttpGet("Create")]
+        public IActionResult Create()
+        {  
+            return View();
+        }
+
+
+        [Authorize]
+        [HttpPost("Create")]
+        public IActionResult OnCreatePostAsync()
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    return View();
+            //}
+
+            //_context.Recipes.Add(recipe);
+            //await _context.SaveChangesAsync();
+
+            int id = 1;
+            return View("Index", id);
+            //return View("Recipe", id);
         }
 
 

@@ -15,6 +15,7 @@ namespace FoodEaterRecipes.Data.Entities
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }
+        public Guid ImageFilename { get; set; }
         [Required]
         [MaxLength(10000)]
         public string Description { get; set; }
@@ -25,7 +26,7 @@ namespace FoodEaterRecipes.Data.Entities
 
         [Required]
         [ForeignKey("UserId")]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }     
         
         public ICollection<RecipeIngredient> RecipeIngredient { get; set; }

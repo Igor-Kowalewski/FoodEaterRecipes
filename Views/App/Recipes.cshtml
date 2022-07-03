@@ -24,27 +24,30 @@
 
 
     <div class="row">
-        @foreach (var r in ViewBag.SearchResultRecipes)
+        @if (ViewBag.SearchResultRecipes != null) 
         {
-            <div class="card col-md-3 recipe-info m-2 p-0 bg-dark text-white shadow-lg border-0">
+            foreach (var r in ViewBag.SearchResultRecipes)
+            {
+                <div class="card col-md-3 recipe-info m-2 p-0 bg-dark text-white shadow-lg border-0">
 
-                @* If file in wwwroot\src\id.jpg exists then draw an image *@
-                @{
-                    var filePath = ViewBag.AbsolutePath + Convert.ToString(r.Id) + ".jpg";
-                    if (System.IO.File.Exists(filePath))
-                    {
-                        <img class="card-img-top img-fluid text-center" style=" width: 100%; max-height: 300px; object-fit: cover;" src="~/src/@(r.Id).jpg" alt="@r.Name" />
+                    @* If file in wwwroot\src\guid.jpg exists then draw an image *@
+                    @{
+                        var filePath = ViewBag.AbsolutePath + Convert.ToString(r.ImageFilename) + ".jpg";
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            <img class="card-img-top img-fluid text-center" style=" width: 100%; max-height: 300px; object-fit: cover;" src="~/src/@(r.ImageFilename).jpg" alt="@r.Name" />
+                        }
                     }
-                }
 
-                <div class="card-body text-center">
-                    <h4 class="card-title text-left">@r.Name</h4>
-                    <p class="card-text text-left">@r.Description</p>
+                    <div class="card-body text-center">
+                        <h4 class="card-title text-left">@r.Name</h4>
+                        <p class="card-text text-left">@r.Description</p>
+                    </div>
+
+                    <a href="#" class="card-footer btn btn-outline-info border-secondary border-left-0 border-right-0 rounded-0">See this recipe!</a>
+                    <div class="card-footer text-center text-muted"><small>Last updated: @r.UpdateDT</small></div>
                 </div>
-
-                <a href="#" class="card-footer btn btn-outline-info border-secondary border-left-0 border-right-0 rounded-0">See this recipe!</a>
-                <div class="card-footer text-center text-muted"><small>Last updated: @r.UpdateDT</small></div>
-            </div>
+            }
         }
     </div>
 </div>
