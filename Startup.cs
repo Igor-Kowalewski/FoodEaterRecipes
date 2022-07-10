@@ -31,6 +31,7 @@ namespace FoodEaterRecipes
             {
                 cfg.User.RequireUniqueEmail = true;
                 cfg.Password.RequireDigit = false;
+                cfg.SignIn.RequireConfirmedEmail = false;
             }).AddEntityFrameworkStores<FoodEaterContext>();
             
             services.AddDbContext<FoodEaterContext>();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FoodEaterRecipes.Models
 {
-    public class ContactMessage
+    public class ContactMessageDTO
     {
         [Required]
         [MinLength(5)]

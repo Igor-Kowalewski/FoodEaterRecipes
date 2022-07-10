@@ -23,12 +23,12 @@
     <a class="btn btn-info" asp-controller="App" asp-action="Create"> Add New! </a>
 
 
-    <div class="row">
+    <div class="row justify-content-around">
         @if (ViewBag.SearchResultRecipes != null) 
         {
             foreach (var r in ViewBag.SearchResultRecipes)
             {
-                <div class="card col-md-3 recipe-info m-2 p-0 bg-dark text-white shadow-lg border-0">
+                <div class="card col-md-3 recipe-info m-1 mb-2 p-0 bg-dark text-white shadow-lg border-0">
 
                     @* If file in wwwroot\src\guid.jpg exists then draw an image *@
                     @{

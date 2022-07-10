@@ -12,34 +12,48 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom border-dark box-shadow mb-3 shadow">
             <div class="container">
-                <button class="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li id="HomeNav" class="nav-item">
-                            <a class="nav-link text-light" asp-controller="App" asp-action="Index">Home</a>
-                        </li>
-                        <li id="RecipesNav" class="nav-item">
-                            <a class="nav-link text-light" asp-controller="App" asp-action="Recipes">Recipes</a>
-                        </li>
-                        <li id="AboutNav" class="nav-item">
-                            <a class="nav-link text-light" asp-controller="App" asp-action="AboutUs">About us</a>
-                        </li>
-                        <li id="ContactNav" class="nav-item">
-                            <a class="nav-link text-light" asp-controller="App" asp-action="Contact">Contact</a>
-                        </li>
-                        <li id="SignNav" class="nav-item">
-                            <a class="nav-link text-light" asp-controller="App" asp-action="SignIn">Sign in</a>
-                        </li>
-                    </ul>
-                </div>
+                    <button class="navbar-toggler"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target=".navbar-collapse"
+                            aria-controls="navbarSupportedContent"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex">
+                        <ul class="navbar-nav flex-grow-1 ml-auto">
+                            <li id="HomeNav" class="nav-item">
+                                <a class="nav-link text-light" asp-controller="App" asp-action="Index">Home</a>
+                            </li>
+                            <li id="RecipesNav" class="nav-item">
+                                <a class="nav-link text-light" asp-controller="App" asp-action="Recipes">Recipes</a>
+                            </li>
+                            <li id="AboutNav" class="nav-item">
+                                <a class="nav-link text-light" asp-controller="App" asp-action="AboutUs">About us</a>
+                            </li>
+                            <li id="ContactNav" class="nav-item">
+                                <a class="nav-link text-light" asp-controller="App" asp-action="Contact">Contact</a>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav mr-auto">
+                            @*PRZYLEGANIE DO PRAWEJ*@
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+
+                                <li id="SignNav" class="nav-item">
+                                    <a class="nav-link text-light" asp-controller="Account" asp-action="Logout">Logout</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li id="SignNav" class="nav-item">
+                                    <a class="nav-link text-light" asp-controller="Account" asp-action="Login">Login</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
             </div>
         </nav>
     </header>
@@ -83,7 +97,9 @@
         </footer>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    @*
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    *@
     @RenderSection("Scripts", required: false)
 </body>
 </html>

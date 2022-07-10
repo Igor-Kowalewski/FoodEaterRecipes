@@ -183,7 +183,7 @@ namespace FoodEaterRecipes.Controllers
 
 
         [HttpPost("Contact")]
-        public IActionResult Contact(ContactMessage contactMessage)
+        public IActionResult Contact(ContactMessageDTO contactMessage)
         {
             if (ModelState.IsValid)
             {
@@ -198,13 +198,6 @@ namespace FoodEaterRecipes.Controllers
                 ModelState.Clear();
             }
 
-            return View();
-        }
-
-
-        [HttpGet("Sign")]
-        public IActionResult SignIn()
-        {
             return View();
         }
 

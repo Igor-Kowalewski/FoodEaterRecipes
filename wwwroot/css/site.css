@@ -51,6 +51,14 @@
     justify-content: center;
 }
 
+
+#asp-validation-errors ul
+{
+    padding-left: 0;
+    list-style: none;
+}
+
+
 /* Provide sufficient contrast against white background */
 /*a {
   color: #0366d6;
