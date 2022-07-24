@@ -7,8 +7,9 @@
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/lib/fortawesome/fontawesome-free/css/all.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
+    @RenderSection("head",false)
 </head>
-<body class="bg-secondary" ng-app="">
+<body class="bg-secondary">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom border-dark box-shadow mb-3 shadow">
             <div class="container">
@@ -97,9 +98,6 @@
         </footer>
     </div>
 
-    @*
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-    *@
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -12,17 +12,25 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using FoodEaterRecipes.Data.Entities;
 using Microsoft.AspNetCore.Identity;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace FoodEaterRecipes
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IConfiguration _config;
+
+        public Startup(IConfiguration config)
         {
-            Configuration = configuration;
+;
+            _config = config;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -33,6 +41,17 @@ namespace FoodEaterRecipes
                 cfg.Password.RequireDigit = false;
                 cfg.SignIn.RequireConfirmedEmail = false;
             }).AddEntityFrameworkStores<FoodEaterContext>();
+
+            services.AddAuthentication()
+                .AddCookie()
+                .AddJwtBearer(cfg => {
+                    cfg.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidIssuer = _config["Tokens:Issuer"],
+                        ValidAudience = _config["Tokens:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]))
+                    };
+                });
             
             services.AddDbContext<FoodEaterContext>();
 
@@ -62,6 +81,18 @@ namespace FoodEaterRecipes
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseStatusCodePages(async (StatusCodeContext context) =>
+            {
+                HttpRequest request = context.HttpContext.Request;
+                HttpResponse response = context.HttpContext.Response;
+
+                if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
+                {
+                    response.Redirect("/account/login");
+                }
+            });
+
 
             app.UseAuthentication();
             app.UseAuthorization();

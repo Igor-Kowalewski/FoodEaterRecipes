@@ -2,6 +2,7 @@
 using FoodEaterRecipes.Data.Entities;
 using FoodEaterRecipes.Models;
 using FoodEaterRecipes.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -142,16 +143,18 @@ namespace FoodEaterRecipes.Controllers
         }
 
 
-        [Authorize]
         [HttpGet("Create")]
+        //[Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Identity.Application," + JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult Create()
         {  
             return View();
         }
 
 
-        [Authorize]
         [HttpPost("Create")]
+        //[Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Identity.Application," + JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult OnCreatePostAsync()
         {
             //if (!ModelState.IsValid)
