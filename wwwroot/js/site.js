@@ -22,6 +22,7 @@ $(document).ready(function () {
     });
 
 
+
     /// WYSZUKIWANIE PRZEPISÓW PO NAZWIE - BAZA DANYCH SQL
     var SearchInputRecipes = $("#SearchInputRecipes");
     SearchInputRecipes.on("input", function () {

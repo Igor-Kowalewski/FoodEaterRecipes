@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\ts\main.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Pomoc_Naukowa_1_Lacznie_Z_Baza_Danych.docx" />
     <None Remove="Pomoc_Naukowa_2_Entity_Framework.docx" />
   </ItemGroup>
@@ -38,10 +34,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="wwwroot\ts\main.ts" />
   </ItemGroup>
 
 </Project>

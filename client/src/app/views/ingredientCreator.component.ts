@@ -2,8 +2,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Creator } from "../services/creator.service";
 import { Ingredient } from "../shared/Ingredient";
-import { debounceTime } from 'rxjs/operators';
-
 
 
 @Component({

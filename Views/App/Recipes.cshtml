@@ -4,12 +4,17 @@
 }
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-    <script src="~/lib/jqueryui/jquery-ui.js"></script>
-    <link href="~/lib/jqueryui/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+    @*<script src="~/lib/jqueryui/jquery-ui.js"></script>*@
+    @*<link href="~/lib/jqueryui/themes/smoothness/jquery-ui.css" rel="stylesheet" />*@
+
+    @* Wyszukiwarka Autocomplete wymaga jquery-ui zawartego poniżej *@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css" integrity="sha512-Q2qvb9omuMvaoo6ofA3xaiD3b1aA7BlQGYxEOTij6i4HRsDNB7K2uEUHbbymUqqFDduToacMzKNYYVRwe4H2yw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 }
 
 
 <div class="container">
+    
     <form method="post">
         <div class="form-group">
             @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @id = "SearchInputRecipes", @placeholder = "Search..." } })
@@ -24,7 +29,7 @@
 
 
     <div class="row justify-content-around">
-        @if (ViewBag.SearchResultRecipes != null) 
+        @if (ViewBag.SearchResultRecipes != null)
         {
             foreach (var r in ViewBag.SearchResultRecipes)
             {
@@ -50,5 +55,6 @@
             }
         }
     </div>
+
 </div>
 

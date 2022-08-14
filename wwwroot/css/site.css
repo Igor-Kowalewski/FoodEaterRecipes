@@ -1,13 +1,28 @@
 ﻿
+
+
 /*AUTOCOMPLETE SELECTORS*/
+.form-control:focus {
+    border-color: rgb(91, 192, 222) !important;
+    box-shadow: 0 0 0 0.1rem rgb(91, 192, 222) !important;
+}
+
 .ui-autocomplete {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: default;
+    overflow-y: auto; /* prevent horizontal scrollbar */
+    overflow-x: hidden; /* add padding to account for vertical scrollbar */
+
     z-index: 1000 !important;
     margin: 10px 0 0 !important;
+    padding: 0 !important;
     list-style: none !important;
     font-size: 16px !important;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-    background-color: #f5f5f5 !important;
-    border: 1px solid rgb(0 38 255) !important;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+    /* background-color: #f5f5f5 !important; */
+    border: 1px solid rgb(91, 192, 222) !important;
     border-radius: 4px !important;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175) !important;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175) !important;
@@ -15,8 +30,9 @@
 }
 
     .ui-autocomplete > li > div {
+        width: 100%;
         display: block !important;
-        padding: 3px 20px !important;
+        padding: 3px 10px !important;
         clear: both !important;
         font-weight: normal !important;
         line-height: 1.42857143 !important;
