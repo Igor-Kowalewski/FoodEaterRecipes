@@ -1,0 +1,39 @@
+﻿<div class="row">
+    <div class="container">
+        <!--<div class="col p-1 m-0 d-inline-block text-dark">-->
+        <!--Zamieniam wersję ASP.NET na Angularową-->
+        <!--@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control p-2 m-0", @id = "SearchInputIngredient", @placeholder = "Search..." }});-->
+        <!--</div>-->
+
+        <form class="col col-10 col-md-9 p-2 m-0 d-inline-block">
+            <mat-form-field>
+                <input type="text" name="prefix" [(ngModel)]="prefix" (ngModelChange)="updateIngredientList(prefix)" matInput [matAutocomplete]="auto" placeholder="Search ingredient" />
+                <mat-autocomplete #auto="matAutocomplete" panelWidth="auto" (optionSelected)="setTemplateIngredient($event.option.value)">
+                    <mat-option *ngFor="let ingredient of creator.ingredients" [value]="ingredient.name">
+                        {{ingredient.name}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </form>
+
+
+        <div class="col col-2 col-md-3 p-0 m-0 d-inline-block">
+            <button class="btn btn-light btn-block" id="addIngredientBtn"><i class="fas fa-plus fa-1x"></i> </button>
+        </div>
+
+
+        <div class="col col-12 p-0 m-0 d-inline-block text-center bg-dark rounded">
+            <p class="p-0 m-0" id="ingredientAdded" style="height: 38px;">Testowy div!</p>
+
+
+            <form class="col col-12">
+                <input type="text" [(ngModel)]="ingredientSelectedIntoForm.name" name="name" />
+                <input type="text" [(ngModel)]="ingredientSelectedIntoForm.kcal" name="kcal" />
+                <input type="text" [(ngModel)]="ingredientSelectedIntoForm.carbs" name="carbs" />
+                <input type="text" [(ngModel)]="ingredientSelectedIntoForm.fats" name="fats" />
+                <input type="text" [(ngModel)]="ingredientSelectedIntoForm.proteins" name="proteins" />
+            </form>
+        </div>
+
+    </div>
+</div>
