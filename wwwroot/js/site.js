@@ -54,7 +54,7 @@ $(document).ready(function () {
     });
 
 
-    /// WYSZUKIWANIE SKŁADNIKÓW PO NAZWIE - ZEWNĘTRZNE API
+    /// WYSZUKIWANIE SKŁADNIKÓW PO NAZWIE - ZEWNĘTRZNE API nutritionix.com
     var SearchIngredientResult = []
     var SearchInputIngredient = $("#SearchInputIngredient");
     SearchInputIngredient.on("input", function () {

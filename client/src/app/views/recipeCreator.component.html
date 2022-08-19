@@ -1,5 +1,46 @@
-﻿<div class="row">
-    <ul>
-        <li *ngFor="let i of ingredients">{{ i.name }}</li>
-    </ul>
+﻿<div class="row border border-dark rounded-lg p-3 m-1">
+    <h5 class="h3">Recipe</h5>
+    <mat-divider></mat-divider>
+    <br>
+    <div class="container p-0 m-0">
+        <div class="card bg-dark table-responsive p-0 m-0 col col-12">
+            <div class="card-body p-0 m-0">
+                <table class="table table-hover text-center table-striped table-dark text-light p-0 m-0">
+                    <thead class="thead-dark">
+                        <tr p-0 m-0>
+                            <th scope="col">#</th>
+                            <th>Name</th>
+                            <th>Weight</th>
+                            <th>Kcal</th>
+                            <th>Carbs</th>
+                            <th>Fats</th>
+                            <th>Proteins</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let i of ingredients; let j = index">
+                            <td scope="col">{{ j+1 }}</td>
+                            <td scope="col">{{ i.name }}</td>
+                            <td scope="col">{{ i.weight | number : '1.0-0' }}</td>
+                            <td scope="col">{{ i.kcal | number : '1.0-0' }}</td>
+                            <td scope="col">{{ i.carbs | number : '1.0-0' }}</td>
+                            <td scope="col">{{ i.fats | number : '1.0-0' }}</td>
+                            <td scope="col">{{ i.proteins | number : '1.0-0' }}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td scope="row"><strong>Total:</strong></td>
+                            <td>{{ recipeSummary.name | number : '1.0-0' }}</td>
+                            <td>{{ recipeSummary.weight | number : '1.0-0' }}</td>
+                            <td>{{ recipeSummary.kcal | number : '1.0-0' }}</td>
+                            <td>{{ recipeSummary.carbs | number : '1.0-0' }}</td>
+                            <td>{{ recipeSummary.fats | number : '1.0-0' }}</td>
+                            <td>{{ recipeSummary.proteins | number : '1.0-0' }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>

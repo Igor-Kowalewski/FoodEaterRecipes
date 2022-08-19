@@ -10,16 +10,17 @@ import { Ingredient } from "../shared/Ingredient";
 })
 
 export default class IngredientCreator {
-    @Input() prefix!: string | string;                          // wzorzec używany do wyszukiwania w API składników
+    @Input() prefix!: string;            // wzorzec używany do wyszukiwania w API składników
 
-    public ingredientSelectedInAutocomplete: string = "";       // opcja wybrana na liście rozwijanej Autocomplete
+    public ingredientSelected: string = "";       // opcja wybrana na liście rozwijanej Autocomplete
 
-    public ingredientSelectedIntoForm: Ingredient = {
-        name: "",
-        kcal: 0,
-        carbs: 0,
-        fats: 0,
-        proteins: 0
+    public ingredientTemplate: Ingredient = {
+        name: null || '',
+        weight: null || '',
+        kcal: null || '',
+        carbs: null || '',
+        fats: null || '',
+        proteins: null || ''
     }
 
 
@@ -44,15 +45,35 @@ export default class IngredientCreator {
 
     // znajduję pierwszy element z Autocomplete, który pokrywa się z szukanym wzorcem wybranym z listy
     setTemplateIngredient(ingredientSelected: string) {
-        this.ingredientSelectedInAutocomplete = ingredientSelected;
+        this.ingredientSelected = ingredientSelected;
 
         let temp = this.creator.ingredients.find((i) => { return i.name === ingredientSelected });
 
         if (temp !== undefined) {
-            this.ingredientSelectedIntoForm = temp;
+            this.ingredientTemplate = temp;
         }
 
-        console.log(this.ingredientSelectedIntoForm.name);
+        console.log(this.ingredientTemplate.name);
     }
 
+
+    // dodawanie nowego składnika do przepisu
+    addIngredient(ingredientTemplate: Ingredient) {
+        if (ingredientTemplate.name != '')
+        {
+            console.log(ingredientTemplate.name);
+
+            let ingredientCopy: Ingredient = { ...ingredientTemplate }; // shallow copy template
+            this.creator.recipeIngredients.push(ingredientCopy); // and push copy to recipeingredients
+            this.updateSummary();
+        }
+    }
+
+    updateSummary(): void {
+        this.creator.recipeSummary.weight = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.weight), 0);
+        this.creator.recipeSummary.kcal = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.kcal), 0);
+        this.creator.recipeSummary.carbs = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.carbs), 0);
+        this.creator.recipeSummary.fats = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.fats), 0);
+        this.creator.recipeSummary.proteins = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.proteins), 0);
+    }
 }

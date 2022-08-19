@@ -66,6 +66,8 @@ namespace FoodEaterRecipes.Controllers
             return Json(ingredientList);
         }
 
+
+        // Zapytanie do api@nutritionix.com - darmowa subskrypcja do 1000 zapytań dziennie
         private static async Task<List<IngredientCompositionDTO>> GetIngridientsFromAPI(string Prefix)
         {
             List<IngredientCompositionDTO> response = new();

@@ -10,6 +10,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { MatDividerModule } from "@angular/material/divider";
+import { MatListModule } from "@angular/material/list";
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { FormsModule } from '@angular/forms';
         BrowserAnimationsModule,
         MatAutocompleteModule,
         MatInputModule,
-        FormsModule
+        FormsModule,
+        MatDividerModule,
+        MatListModule
     ],
     exports: [
         MatAutocompleteModule,

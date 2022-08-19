@@ -12,7 +12,17 @@ export class Creator {
     }
 
     public ingredients: Ingredient[] = [];
+    public recipeIngredients: Ingredient[] = [];
+    public recipeSummary: Ingredient = {
+        name: null || '',
+        weight: null || 0,
+        kcal: null || 0,
+        carbs: null || 0,
+        fats: null || 0,
+        proteins: null || 0
+    }
 
+    // Zapytanie do kontrolera a następnie api@nutritionix.com
     getIngredients(prefix: string): Observable<void> {
         let url = "/api/Ingredients";
         let headers = new HttpHeaders();
