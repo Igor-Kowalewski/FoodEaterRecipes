@@ -34,16 +34,16 @@
                         <input matInput class="mat-form-field m-0 p-1" numbersOnly required type="number" placeholder="Weight (g)" [(ngModel)]="ingredientTemplate.weight" name="weight" />
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput class="mat-form-field m-0 p-1" numbersOnly required type="number" placeholder="Kcal per 100g" [(ngModel)]="ingredientTemplate.kcal" name="kcal" />
+                        <input matInput class="mat-form-field m-0 p-1" numbersOnly required type="number" min="0" max="900" placeholder="Kcal per 100g" [(ngModel)]="ingredientTemplate.kcal" name="kcal" />
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput class="mat-form-field m-0 p-1" numbersOnly required type="number" placeholder="Carbohydrates per 100g" [(ngModel)]="ingredientTemplate.carbs" name="carbs" />
+                        <input matInput class="mat-form-field m-0 p-1" numbersOnly required type="number" min="0" max="100" placeholder="Carbohydrates per 100g" [(ngModel)]="ingredientTemplate.carbs" name="carbs" />
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput class="mat-form-field m-0 p-1" numbersOnly required type="number" placeholder="Fats per 100g" [(ngModel)]="ingredientTemplate.fats" name="fats" />
+                        <input matInput class="mat-form-field m-0 p-1" numbersOnly required type="number" min="0" max="100" placeholder="Fats per 100g" [(ngModel)]="ingredientTemplate.fats" name="fats" />
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput class="mat-form-field m-0 p-1" numbersOnly required type="number" placeholder="Proteins per 100g" [(ngModel)]="ingredientTemplate.proteins" name="proteins" />
+                        <input matInput class="mat-form-field m-0 p-1" numbersOnly required type="number" min="0" max="100" placeholder="Proteins per 100g" [(ngModel)]="ingredientTemplate.proteins" name="proteins" />
                     </mat-form-field>
                 </form>
             </div>

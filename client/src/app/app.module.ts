@@ -12,13 +12,18 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from "@angular/material/divider";
 import { MatListModule } from "@angular/material/list";
+import { MatTableModule } from '@angular/material/table'
+//import { NgbdSortableHeader } from './directives/sortable.directive';
+import { MatSortModule } from '@angular/material/sort';
+
 
 
 @NgModule({
     declarations: [
         AppComponent,
         IngredientCreator,
-        RecipeCreator
+        RecipeCreator,
+        //NgbdSortableHeader
     ],
     imports: [
         BrowserModule,
@@ -28,7 +33,9 @@ import { MatListModule } from "@angular/material/list";
         MatInputModule,
         FormsModule,
         MatDividerModule,
-        MatListModule
+        MatListModule,
+        MatTableModule,
+        MatSortModule
     ],
     exports: [
         MatAutocompleteModule,

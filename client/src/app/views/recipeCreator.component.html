@@ -3,44 +3,148 @@
     <mat-divider></mat-divider>
     <br>
     <div class="container p-0 m-0">
+        <!--<div class="row card bg-dark table-responsive p-0 m-0 col col-12">
+        <div class="card-body p-0 m-0">
+            <table mat-table class="table table-hover text-center table-striped table-dark text-light p-0 m-0">
+                <thead class="thead-dark">
+                    <tr p-0 m-0>
+                        <th scope="col">#</th>
+                        <th>Name</th>
+                        <th>Weight</th>
+                        <th>Kcal</th>
+                        <th>Carbs</th>
+                        <th>Fats</th>
+                        <th>Proteins</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let i of ingredients; let j = index">
+                        <td scope="col">{{ j+1 }}</td>
+                        <td scope="col">{{ i.name }}</td>
+                        <td scope="col">{{ i.weight | number : '1.0-0' }}</td>
+                        <td scope="col">{{ i.kcal | number : '1.0-0' }}</td>
+                        <td scope="col">{{ i.carbs | number : '1.0-0' }}</td>
+                        <td scope="col">{{ i.fats | number : '1.0-0' }}</td>
+                        <td scope="col">{{ i.proteins | number : '1.0-0' }}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td scope="row"><strong>Total:</strong></td>
+                        <td>{{ recipeSummary.name | number : '1.0-0' }}</td>
+                        <td>{{ recipeSummary.weight | number : '1.0-0' }}</td>
+                        <td>{{ recipeSummary.kcal | number : '1.0-0' }}</td>
+                        <td>{{ recipeSummary.carbs | number : '1.0-0' }}</td>
+                        <td>{{ recipeSummary.fats | number : '1.0-0' }}</td>
+                        <td>{{ recipeSummary.proteins | number : '1.0-0' }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>-->
+
+
         <div class="card bg-dark table-responsive p-0 m-0 col col-12">
-            <div class="card-body p-0 m-0">
-                <table class="table table-hover text-center table-striped table-dark text-light p-0 m-0">
-                    <thead class="thead-dark">
-                        <tr p-0 m-0>
-                            <th scope="col">#</th>
-                            <th>Name</th>
-                            <th>Weight</th>
-                            <th>Kcal</th>
-                            <th>Carbs</th>
-                            <th>Fats</th>
-                            <th>Proteins</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let i of ingredients; let j = index">
-                            <td scope="col">{{ j+1 }}</td>
-                            <td scope="col">{{ i.name }}</td>
-                            <td scope="col">{{ i.weight | number : '1.0-0' }}</td>
-                            <td scope="col">{{ i.kcal | number : '1.0-0' }}</td>
-                            <td scope="col">{{ i.carbs | number : '1.0-0' }}</td>
-                            <td scope="col">{{ i.fats | number : '1.0-0' }}</td>
-                            <td scope="col">{{ i.proteins | number : '1.0-0' }}</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td scope="row"><strong>Total:</strong></td>
-                            <td>{{ recipeSummary.name | number : '1.0-0' }}</td>
-                            <td>{{ recipeSummary.weight | number : '1.0-0' }}</td>
-                            <td>{{ recipeSummary.kcal | number : '1.0-0' }}</td>
-                            <td>{{ recipeSummary.carbs | number : '1.0-0' }}</td>
-                            <td>{{ recipeSummary.fats | number : '1.0-0' }}</td>
-                            <td>{{ recipeSummary.proteins | number : '1.0-0' }}</td>
-                        </tr>
-                    </tfoot>
-                </table>
+            <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
+                   class="mat-elevation-z8">
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                        Name
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="weight">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by weight">
+                        Weight
+                    </th>
+                    <td mat-cell class="ml-1" *matCellDef="let element"> {{element.weight | number : '1.0-0' }} </td>
+                </ng-container>
+
+
+                <!-- Kcal Column -->
+                <ng-container matColumnDef="kcal">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by kcal">
+                        Kcal
+                    </th>
+                    <td mat-cell class="ml-1" *matCellDef="let element"> {{element.kcal | number : '1.0-0' }} </td>
+                </ng-container>
+
+
+                <!-- Carbs Column -->
+                <ng-container matColumnDef="carbs">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by carbs">
+                        Carbs
+                    </th>
+                    <td mat-cell class="ml-1" *matCellDef="let element"> {{element.carbs | number : '1.0-0' }} </td>
+                </ng-container>
+
+
+                <!-- Fats Column -->
+                <ng-container matColumnDef="fats">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by fats">
+                        Fats
+                    </th>
+                    <td mat-cell class="ml-1" *matCellDef="let element"> {{element.fats | number : '1.0-0' }} </td>
+                </ng-container>
+
+
+                <!-- Proteins Column -->
+                <ng-container matColumnDef="proteins">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by proteins">
+                        Proteins
+                    </th>
+                    <td mat-cell class="ml-1" *matCellDef="let element"> {{element.proteins | number : '1.0-0' }} </td>
+                </ng-container>
+
+
+
+                <!-- Edit, Delete -->
+                <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let row, let element">
+                        <!-- element przekazuje nazwę albo wiersz danego składnika! -->
+                        <button class="btn btn-info ml-1" mat-button>Edit</button>
+                        <button class="btn btn-danger ml-1" mat-button>Delete</button>
+                    </mat-cell>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+
+
+
+        <!-- Image upload -->
+        <div class="row mt-3">
+            <div class="col">
+                <div class="custom-file">
+                    <input type="file" accept="image/*" class="custom-file-input" id="customFile" (change)="handleFileInput($any($event.target).files)" [disabled]="working">
+                    <label class="custom-file-label" for="customFile">{{ uploadFileLabel }}</label>
+                </div>
+            </div>
+            <div class="col-auto pl-sm-0">
+                <button type="button" class="btn btn-light btn-block" ngbTooltip="Upload" (click)="upload()" [disabled]="working">Upload</button>
             </div>
         </div>
+        <div class="row mt-3" *ngIf="working">
+            <div class="col">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploadProgress + '%' }" [attr.aria-valuenow]="uploadProgress" aria-valuemin="0" aria-valuemax="100">{{ uploadProgress }}%</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3" *ngIf="uploadUrl?.length">
+            <div class="col">
+                <img [src]="uploadUrl" alt="preview" class="rounded shadow w-100">
+            </div>
+        </div>
+
+
     </div>
 </div>

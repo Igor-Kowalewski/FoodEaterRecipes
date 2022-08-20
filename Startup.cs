@@ -18,6 +18,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.Extensions.FileProviders;
 
 namespace FoodEaterRecipes
 {
@@ -79,6 +81,19 @@ namespace FoodEaterRecipes
             }
 
             app.UseStaticFiles();
+
+
+            // for the wwwroot/src folder
+            string uploadsDir = Path.Combine(env.WebRootPath, "src");
+            if (!Directory.Exists(uploadsDir))
+                Directory.CreateDirectory(uploadsDir);
+
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                RequestPath = "/src",
+                FileProvider = new PhysicalFileProvider(uploadsDir)
+            });
+
 
             app.UseRouting();
 

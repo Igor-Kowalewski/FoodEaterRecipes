@@ -50,10 +50,15 @@ export default class IngredientCreator {
         let temp = this.creator.ingredients.find((i) => { return i.name === ingredientSelected });
 
         if (temp !== undefined) {
-            this.ingredientTemplate = temp;
+            this.ingredientTemplate.name = temp.name;
+            this.ingredientTemplate.weight = 0;
+            this.ingredientTemplate.kcal = Number(temp.kcal).toFixed(2);
+            this.ingredientTemplate.fats = Number(temp.fats).toFixed(2);
+            this.ingredientTemplate.carbs = Number(temp.carbs).toFixed(2);
+            this.ingredientTemplate.proteins = Number(temp.proteins).toFixed(2);
         }
 
-        console.log(this.ingredientTemplate.name);
+        console.log(this.ingredientTemplate);
     }
 
 
@@ -64,16 +69,7 @@ export default class IngredientCreator {
             console.log(ingredientTemplate.name);
 
             let ingredientCopy: Ingredient = { ...ingredientTemplate }; // shallow copy template
-            this.creator.recipeIngredients.push(ingredientCopy); // and push copy to recipeingredients
-            this.updateSummary();
+            this.creator.tableDataChanged.next(ingredientCopy); // and push copy to recipeingredients
         }
-    }
-
-    updateSummary(): void {
-        this.creator.recipeSummary.weight = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.weight), 0);
-        this.creator.recipeSummary.kcal = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.kcal), 0);
-        this.creator.recipeSummary.carbs = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.carbs), 0);
-        this.creator.recipeSummary.fats = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.fats), 0);
-        this.creator.recipeSummary.proteins = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.proteins), 0);
     }
 }

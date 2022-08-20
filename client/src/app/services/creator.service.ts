@@ -1,16 +1,13 @@
 ﻿import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { Ingredient } from "../shared/Ingredient";
 
 @Injectable()
-export class Creator {
+ export class Creator {
 
-    constructor(private http: HttpClient) {
-
-    }
-
+    public tableDataChanged: Subject<Ingredient> = new Subject<Ingredient>();
     public ingredients: Ingredient[] = [];
     public recipeIngredients: Ingredient[] = [];
     public recipeSummary: Ingredient = {
@@ -21,6 +18,12 @@ export class Creator {
         fats: null || 0,
         proteins: null || 0
     }
+
+
+    constructor(private http: HttpClient) {
+
+    }
+
 
     // Zapytanie do kontrolera a następnie api@nutritionix.com
     getIngredients(prefix: string): Observable<void> {

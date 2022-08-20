@@ -5,11 +5,14 @@ using FoodEaterRecipes.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -170,6 +173,54 @@ namespace FoodEaterRecipes.Controllers
             int id = 1;
             return View("Index", id);
             //return View("Recipe", id);
+        }
+
+
+        [HttpPost("api/src/upload")]
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadFile()
+        {
+            if (!Request.Form.Files.Any())
+                return BadRequest("No files found in the request");
+
+            if (Request.Form.Files.Count > 1)
+                return BadRequest("Cannot upload more than one file at a time");
+
+            if (Request.Form.Files[0].Length <= 0)
+                return BadRequest("Invalid file length, seems to be empty");
+
+            try
+            {
+                string webRootPath = _environment.WebRootPath;
+                string uploadsDir = Path.Combine(webRootPath, "src");
+
+                // wwwroot/src/
+                if (!Directory.Exists(uploadsDir))
+                    Directory.CreateDirectory(uploadsDir);
+
+                IFormFile file = Request.Form.Files[0];
+                string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                string fullPath = Path.Combine(uploadsDir, fileName);
+
+                var buffer = 1024 * 1024;
+                using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, buffer, useAsync: false);
+                await file.CopyToAsync(stream);
+                await stream.FlushAsync();
+
+                string location = $"src/{fileName}";
+
+                var result = new
+                {
+                    message = "Upload successful",
+                    url = location
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Upload failed: " + ex.Message);
+            }
         }
 
 

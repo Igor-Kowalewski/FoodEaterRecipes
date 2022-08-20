@@ -56,7 +56,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/input */ 8562);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/forms */ 2508);
 /* harmony import */ var _angular_material_divider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/material/divider */ 1528);
-/* harmony import */ var _angular_material_list__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/material/list */ 517);
+/* harmony import */ var _angular_material_list__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/material/list */ 6517);
+/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/material/table */ 5288);
+/* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/material/sort */ 2197);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 2560);
 
 
@@ -69,6 +71,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+//import { NgbdSortableHeader } from './directives/sortable.directive';
 
 
 class AppModule {
@@ -84,7 +89,9 @@ AppModule.ɵinj = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵ
         _angular_material_input__WEBPACK_IMPORTED_MODULE_9__.MatInputModule,
         _angular_forms__WEBPACK_IMPORTED_MODULE_10__.FormsModule,
         _angular_material_divider__WEBPACK_IMPORTED_MODULE_11__.MatDividerModule,
-        _angular_material_list__WEBPACK_IMPORTED_MODULE_12__.MatListModule, _angular_material_autocomplete__WEBPACK_IMPORTED_MODULE_8__.MatAutocompleteModule,
+        _angular_material_list__WEBPACK_IMPORTED_MODULE_12__.MatListModule,
+        _angular_material_table__WEBPACK_IMPORTED_MODULE_13__.MatTableModule,
+        _angular_material_sort__WEBPACK_IMPORTED_MODULE_14__.MatSortModule, _angular_material_autocomplete__WEBPACK_IMPORTED_MODULE_8__.MatAutocompleteModule,
         _angular_material_input__WEBPACK_IMPORTED_MODULE_9__.MatInputModule] });
 (function () { (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵsetNgModuleScope"](AppModule, { declarations: [_app_component__WEBPACK_IMPORTED_MODULE_0__.AppComponent,
         _views_ingredientCreator_component__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -95,7 +102,9 @@ AppModule.ɵinj = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵ
         _angular_material_input__WEBPACK_IMPORTED_MODULE_9__.MatInputModule,
         _angular_forms__WEBPACK_IMPORTED_MODULE_10__.FormsModule,
         _angular_material_divider__WEBPACK_IMPORTED_MODULE_11__.MatDividerModule,
-        _angular_material_list__WEBPACK_IMPORTED_MODULE_12__.MatListModule], exports: [_angular_material_autocomplete__WEBPACK_IMPORTED_MODULE_8__.MatAutocompleteModule,
+        _angular_material_list__WEBPACK_IMPORTED_MODULE_12__.MatListModule,
+        _angular_material_table__WEBPACK_IMPORTED_MODULE_13__.MatTableModule,
+        _angular_material_sort__WEBPACK_IMPORTED_MODULE_14__.MatSortModule], exports: [_angular_material_autocomplete__WEBPACK_IMPORTED_MODULE_8__.MatAutocompleteModule,
         _angular_material_input__WEBPACK_IMPORTED_MODULE_9__.MatInputModule] }); })();
 
 
@@ -111,9 +120,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Creator": () => (/* binding */ Creator)
 /* harmony export */ });
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/common/http */ 8987);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/operators */ 635);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 2560);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ 8987);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs */ 228);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ 635);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 2560);
+
 
 
 
@@ -121,6 +132,7 @@ __webpack_require__.r(__webpack_exports__);
 class Creator {
     constructor(http) {
         this.http = http;
+        this.tableDataChanged = new rxjs__WEBPACK_IMPORTED_MODULE_0__.Subject();
         this.ingredients = [];
         this.recipeIngredients = [];
         this.recipeSummary = {
@@ -135,18 +147,18 @@ class Creator {
     // Zapytanie do kontrolera a następnie api@nutritionix.com
     getIngredients(prefix) {
         let url = "/api/Ingredients";
-        let headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_0__.HttpHeaders();
+        let headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__.HttpHeaders();
         headers.append('Content-Type', 'application/json');
-        let params = new _angular_common_http__WEBPACK_IMPORTED_MODULE_0__.HttpParams().set("prefix", prefix);
+        let params = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__.HttpParams().set("prefix", prefix);
         return this.http.get(url, { headers: headers, params: params })
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_1__.map)(data => {
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_2__.map)(data => {
             this.ingredients = data; // tutaj trza poprawić 
             return;
         }));
     }
 }
-Creator.ɵfac = function Creator_Factory(t) { return new (t || Creator)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_0__.HttpClient)); };
-Creator.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: Creator, factory: Creator.ɵfac });
+Creator.ɵfac = function Creator_Factory(t) { return new (t || Creator)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_1__.HttpClient)); };
+Creator.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineInjectable"]({ token: Creator, factory: Creator.ɵfac });
 
 
 /***/ }),
@@ -217,29 +229,26 @@ class IngredientCreator {
         this.ingredientSelected = ingredientSelected;
         let temp = this.creator.ingredients.find((i) => { return i.name === ingredientSelected; });
         if (temp !== undefined) {
-            this.ingredientTemplate = temp;
+            this.ingredientTemplate.name = temp.name;
+            this.ingredientTemplate.weight = 0;
+            this.ingredientTemplate.kcal = Number(temp.kcal).toFixed(2);
+            this.ingredientTemplate.fats = Number(temp.fats).toFixed(2);
+            this.ingredientTemplate.carbs = Number(temp.carbs).toFixed(2);
+            this.ingredientTemplate.proteins = Number(temp.proteins).toFixed(2);
         }
-        console.log(this.ingredientTemplate.name);
+        console.log(this.ingredientTemplate);
     }
     // dodawanie nowego składnika do przepisu
     addIngredient(ingredientTemplate) {
         if (ingredientTemplate.name != '') {
             console.log(ingredientTemplate.name);
             let ingredientCopy = { ...ingredientTemplate }; // shallow copy template
-            this.creator.recipeIngredients.push(ingredientCopy); // and push copy to recipeingredients
-            this.updateSummary();
+            this.creator.tableDataChanged.next(ingredientCopy); // and push copy to recipeingredients
         }
-    }
-    updateSummary() {
-        this.creator.recipeSummary.weight = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.weight), 0);
-        this.creator.recipeSummary.kcal = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.kcal), 0);
-        this.creator.recipeSummary.carbs = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.carbs), 0);
-        this.creator.recipeSummary.fats = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.fats), 0);
-        this.creator.recipeSummary.proteins = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.proteins), 0);
     }
 }
 IngredientCreator.ɵfac = function IngredientCreator_Factory(t) { return new (t || IngredientCreator)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_services_creator_service__WEBPACK_IMPORTED_MODULE_0__.Creator)); };
-IngredientCreator.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: IngredientCreator, selectors: [["ingredientCreator"]], inputs: { prefix: "prefix" }, decls: 30, vars: 9, consts: [[1, "row", "border", "border-dark", "rounded-lg", "p-3", "m-1"], [1, "h3"], [1, "container", "p-0", "m-0"], [1, "col", "col-10", "col-md-9", "p-2", "m-0", "d-inline-block"], ["type", "text", "name", "prefix", "matInput", "", "placeholder", "Search ingredient", 3, "ngModel", "matAutocomplete", "ngModelChange"], ["panelWidth", "auto", 3, "optionSelected"], ["auto", "matAutocomplete"], [3, "value", 4, "ngFor", "ngForOf"], [1, "col", "col-2", "col-md-3", "p-0", "m-0", "d-inline-block"], ["id", "addIngredientBtn", 1, "btn", "btn-light", "btn-block", 3, "click"], [1, "fas", "fa-plus", "fa-1x"], [1, "col", "col-12", "p-0", "m-0", "d-inline-block", "bg-dark", "rounded", "m-0", "p-1"], [1, "col", "col-6", "m-0", "p-0", "d-inline-block"], [1, "m-1", "p-1"], ["matInput", "", "required", "", "type", "text", "placeholder", "Name", "name", "name", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "placeholder", "Weight (g)", "name", "weight", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "placeholder", "Kcal per 100g", "name", "kcal", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "placeholder", "Carbohydrates per 100g", "name", "carbs", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "placeholder", "Fats per 100g", "name", "fats", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "placeholder", "Proteins per 100g", "name", "proteins", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], [3, "value"]], template: function IngredientCreator_Template(rf, ctx) { if (rf & 1) {
+IngredientCreator.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: IngredientCreator, selectors: [["ingredientCreator"]], inputs: { prefix: "prefix" }, decls: 30, vars: 9, consts: [[1, "row", "border", "border-dark", "rounded-lg", "p-3", "m-1"], [1, "h3"], [1, "container", "p-0", "m-0"], [1, "col", "col-10", "col-md-9", "p-2", "m-0", "d-inline-block"], ["type", "text", "name", "prefix", "matInput", "", "placeholder", "Search ingredient", 3, "ngModel", "matAutocomplete", "ngModelChange"], ["panelWidth", "auto", 3, "optionSelected"], ["auto", "matAutocomplete"], [3, "value", 4, "ngFor", "ngForOf"], [1, "col", "col-2", "col-md-3", "p-0", "m-0", "d-inline-block"], ["id", "addIngredientBtn", 1, "btn", "btn-light", "btn-block", 3, "click"], [1, "fas", "fa-plus", "fa-1x"], [1, "col", "col-12", "p-0", "m-0", "d-inline-block", "bg-dark", "rounded", "m-0", "p-1"], [1, "col", "col-6", "m-0", "p-0", "d-inline-block"], [1, "m-1", "p-1"], ["matInput", "", "required", "", "type", "text", "placeholder", "Name", "name", "name", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "placeholder", "Weight (g)", "name", "weight", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "min", "0", "max", "900", "placeholder", "Kcal per 100g", "name", "kcal", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "min", "0", "max", "100", "placeholder", "Carbohydrates per 100g", "name", "carbs", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "min", "0", "max", "100", "placeholder", "Fats per 100g", "name", "fats", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "min", "0", "max", "100", "placeholder", "Proteins per 100g", "name", "proteins", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], [3, "value"]], template: function IngredientCreator_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0)(1, "h5", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2, "Ingredient");
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
@@ -291,7 +300,7 @@ IngredientCreator.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngModel", ctx.ingredientTemplate.fats);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngModel", ctx.ingredientTemplate.proteins);
-    } }, dependencies: [_angular_common__WEBPACK_IMPORTED_MODULE_2__.NgForOf, _angular_material_autocomplete__WEBPACK_IMPORTED_MODULE_3__.MatAutocomplete, _angular_material_autocomplete__WEBPACK_IMPORTED_MODULE_3__.MatAutocompleteTrigger, _angular_material_core__WEBPACK_IMPORTED_MODULE_4__.MatOption, _angular_material_form_field__WEBPACK_IMPORTED_MODULE_5__.MatFormField, _angular_material_input__WEBPACK_IMPORTED_MODULE_6__.MatInput, _angular_forms__WEBPACK_IMPORTED_MODULE_7__["ɵNgNoValidate"], _angular_forms__WEBPACK_IMPORTED_MODULE_7__.DefaultValueAccessor, _angular_forms__WEBPACK_IMPORTED_MODULE_7__.NumberValueAccessor, _angular_forms__WEBPACK_IMPORTED_MODULE_7__.NgControlStatus, _angular_forms__WEBPACK_IMPORTED_MODULE_7__.NgControlStatusGroup, _angular_forms__WEBPACK_IMPORTED_MODULE_7__.RequiredValidator, _angular_forms__WEBPACK_IMPORTED_MODULE_7__.NgModel, _angular_forms__WEBPACK_IMPORTED_MODULE_7__.NgForm, _angular_material_divider__WEBPACK_IMPORTED_MODULE_8__.MatDivider], encapsulation: 2 });
+    } }, dependencies: [_angular_common__WEBPACK_IMPORTED_MODULE_2__.NgForOf, _angular_material_autocomplete__WEBPACK_IMPORTED_MODULE_3__.MatAutocomplete, _angular_material_autocomplete__WEBPACK_IMPORTED_MODULE_3__.MatAutocompleteTrigger, _angular_material_core__WEBPACK_IMPORTED_MODULE_4__.MatOption, _angular_material_form_field__WEBPACK_IMPORTED_MODULE_5__.MatFormField, _angular_material_input__WEBPACK_IMPORTED_MODULE_6__.MatInput, _angular_forms__WEBPACK_IMPORTED_MODULE_7__["ɵNgNoValidate"], _angular_forms__WEBPACK_IMPORTED_MODULE_7__.DefaultValueAccessor, _angular_forms__WEBPACK_IMPORTED_MODULE_7__.NumberValueAccessor, _angular_forms__WEBPACK_IMPORTED_MODULE_7__.NgControlStatus, _angular_forms__WEBPACK_IMPORTED_MODULE_7__.NgControlStatusGroup, _angular_forms__WEBPACK_IMPORTED_MODULE_7__.RequiredValidator, _angular_forms__WEBPACK_IMPORTED_MODULE_7__.MinValidator, _angular_forms__WEBPACK_IMPORTED_MODULE_7__.MaxValidator, _angular_forms__WEBPACK_IMPORTED_MODULE_7__.NgModel, _angular_forms__WEBPACK_IMPORTED_MODULE_7__.NgForm, _angular_material_divider__WEBPACK_IMPORTED_MODULE_8__.MatDivider], encapsulation: 2 });
 
 
 /***/ }),
@@ -306,62 +315,158 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ RecipeCreator)
 /* harmony export */ });
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ 8987);
+/* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/sort */ 2197);
+/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/table */ 5288);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 2560);
 /* harmony import */ var _services_creator_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/creator.service */ 5664);
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ 4666);
-/* harmony import */ var _angular_material_divider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/divider */ 1528);
+/* harmony import */ var _angular_cdk_a11y__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/cdk/a11y */ 4218);
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common */ 4666);
+/* harmony import */ var _angular_material_divider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/divider */ 1528);
 
 
 
 
-function RecipeCreator_tr_26_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "tr")(1, "td", 8);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2);
+
+
+
+
+
+
+
+function RecipeCreator_th_9_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "th", 32);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1, " Name ");
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "td", 8);
+} }
+function RecipeCreator_td_10_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "td", 33);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} if (rf & 2) {
+    const element_r18 = ctx.$implicit;
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate1"](" ", element_r18.name, " ");
+} }
+function RecipeCreator_th_12_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "th", 34);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1, " Weight ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} }
+function RecipeCreator_td_13_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "td", 35);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](2, "number");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} if (rf & 2) {
+    const element_r19 = ctx.$implicit;
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate1"](" ", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](2, 1, element_r19.weight, "1.0-0"), " ");
+} }
+function RecipeCreator_th_15_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "th", 36);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1, " Kcal ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} }
+function RecipeCreator_td_16_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "td", 35);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](2, "number");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} if (rf & 2) {
+    const element_r20 = ctx.$implicit;
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate1"](" ", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](2, 1, element_r20.kcal, "1.0-0"), " ");
+} }
+function RecipeCreator_th_18_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "th", 37);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1, " Carbs ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} }
+function RecipeCreator_td_19_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "td", 35);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](2, "number");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} if (rf & 2) {
+    const element_r21 = ctx.$implicit;
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate1"](" ", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](2, 1, element_r21.carbs, "1.0-0"), " ");
+} }
+function RecipeCreator_th_21_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "th", 38);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1, " Fats ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} }
+function RecipeCreator_td_22_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "td", 35);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](2, "number");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} if (rf & 2) {
+    const element_r22 = ctx.$implicit;
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate1"](" ", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](2, 1, element_r22.fats, "1.0-0"), " ");
+} }
+function RecipeCreator_th_24_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "th", 39);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1, " Proteins ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} }
+function RecipeCreator_td_25_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "td", 35);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](2, "number");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} if (rf & 2) {
+    const element_r23 = ctx.$implicit;
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate1"](" ", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](2, 1, element_r23.proteins, "1.0-0"), " ");
+} }
+function RecipeCreator_mat_header_cell_27_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](0, "mat-header-cell");
+} }
+function RecipeCreator_mat_cell_28_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "mat-cell")(1, "button", 40);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2, "Edit");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "button", 41);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](4, "Delete");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]()();
+} }
+function RecipeCreator_tr_29_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](0, "tr", 42);
+} }
+function RecipeCreator_tr_30_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](0, "tr", 43);
+} }
+const _c0 = function (a0) { return { "width": a0 }; };
+function RecipeCreator_div_40_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 24)(1, "div", 25)(2, "div", 44)(3, "div", 45);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](4);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "td", 8);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](6);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](7, "number");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](8, "td", 8);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](9);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](10, "number");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](11, "td", 8);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](12);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](13, "number");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](14, "td", 8);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](15);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](16, "number");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](17, "td", 8);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](18);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](19, "number");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]()()()();
+} if (rf & 2) {
+    const ctx_r16 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](3);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngStyle", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpureFunction1"](3, _c0, ctx_r16.uploadProgress + "%"));
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵattribute"]("aria-valuenow", ctx_r16.uploadProgress);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate1"]("", ctx_r16.uploadProgress, "%");
+} }
+function RecipeCreator_div_41_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 24)(1, "div", 25);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](2, "img", 46);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]()();
 } if (rf & 2) {
-    const i_r1 = ctx.$implicit;
-    const j_r2 = ctx.index;
+    const ctx_r17 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](j_r2 + 1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](i_r1.name);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](7, 7, i_r1.weight, "1.0-0"));
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](3);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](10, 10, i_r1.kcal, "1.0-0"));
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](3);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](13, 13, i_r1.carbs, "1.0-0"));
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](3);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](16, 16, i_r1.fats, "1.0-0"));
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](3);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](19, 19, i_r1.proteins, "1.0-0"));
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("src", ctx_r17.uploadUrl, _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵsanitizeUrl"]);
 } }
 class RecipeCreator {
-    constructor(creator) {
+    constructor(creator, http, _liveAnnouncer) {
         this.creator = creator;
+        this.http = http;
+        this._liveAnnouncer = _liveAnnouncer;
         this.ingredients = [];
         this.recipeSummary = {
             name:  false || '',
@@ -371,83 +476,150 @@ class RecipeCreator {
             fats:  false || 0,
             proteins:  false || 0
         };
+        this.working = false;
+        this.uploadFileLabel = 'Choose an image to upload';
+        this.uploadProgress = 0;
+        this.uploadUrl = '';
+        this.displayedColumns = ['name', 'weight', 'kcal', 'carbs', 'fats', 'proteins', 'actions'];
         this.ingredients = creator.recipeIngredients;
         this.recipeSummary = creator.recipeSummary;
     }
+    ngOnInit() {
+        this.creator.tableDataChanged.subscribe((value) => {
+            this.creator.recipeIngredients.push(value);
+            let temp = this.creator.recipeIngredients;
+            this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_2__.MatTableDataSource(temp);
+            this.dataSource.sort = this.sort;
+            this.creator.recipeSummary.weight = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.weight), 0);
+            this.creator.recipeSummary.kcal = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.kcal), 0);
+            this.creator.recipeSummary.carbs = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.carbs), 0);
+            this.creator.recipeSummary.fats = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.fats), 0);
+            this.creator.recipeSummary.proteins = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.proteins), 0);
+        });
+    }
+    // RECIPE IMAGE UPLOAD
+    handleFileInput(files) {
+        if (files.length > 0) {
+            this.uploadFile = files.item(0);
+            this.uploadFileLabel = this.uploadFile?.name;
+        }
+    }
+    upload() {
+        if (!this.uploadFile) {
+            alert('Choose a file to upload first');
+            return;
+        }
+        const formData = new FormData();
+        formData.append(this.uploadFile.name, this.uploadFile);
+        const url = `/api/src/upload`;
+        const uploadReq = new _angular_common_http__WEBPACK_IMPORTED_MODULE_3__.HttpRequest('POST', url, formData, {
+            reportProgress: true,
+        });
+        this.uploadUrl = '';
+        this.uploadProgress = 0;
+        this.working = true;
+        this.http.request(uploadReq).subscribe((event) => {
+            if (event.type === _angular_common_http__WEBPACK_IMPORTED_MODULE_3__.HttpEventType.UploadProgress) {
+                this.uploadProgress = Math.round((100 * event.loaded) / event.total);
+            }
+            else if (event.type === _angular_common_http__WEBPACK_IMPORTED_MODULE_3__.HttpEventType.Response) {
+                this.uploadUrl = event.body.url;
+            }
+        }, (error) => {
+            console.error(error);
+        }).add(() => {
+            this.working = false;
+        });
+    }
+    /** Announce the change in sort state for assistive technology. */
+    announceSortChange(sortState) {
+        // This example uses English messages. If your application supports
+        // multiple language, you would internationalize these strings.
+        // Furthermore, you can customize the message to add additional
+        // details about the values being sorted.
+        if (sortState.direction) {
+            this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+        }
+        else {
+            this._liveAnnouncer.announce('Sorting cleared');
+        }
+    }
 }
-RecipeCreator.ɵfac = function RecipeCreator_Factory(t) { return new (t || RecipeCreator)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_services_creator_service__WEBPACK_IMPORTED_MODULE_0__.Creator)); };
-RecipeCreator.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: RecipeCreator, selectors: [["recipeCreator"]], decls: 50, vars: 25, consts: [[1, "row", "border", "border-dark", "rounded-lg", "p-3", "m-1"], [1, "h3"], [1, "container", "p-0", "m-0"], [1, "card", "bg-dark", "table-responsive", "p-0", "m-0", "col", "col-12"], [1, "card-body", "p-0", "m-0"], [1, "table", "table-hover", "text-center", "table-striped", "table-dark", "text-light", "p-0", "m-0"], [1, "thead-dark"], ["p-0", "", "m-0", ""], ["scope", "col"], [4, "ngFor", "ngForOf"], ["scope", "row"]], template: function RecipeCreator_Template(rf, ctx) { if (rf & 1) {
+RecipeCreator.ɵfac = function RecipeCreator_Factory(t) { return new (t || RecipeCreator)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_services_creator_service__WEBPACK_IMPORTED_MODULE_0__.Creator), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_3__.HttpClient), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_cdk_a11y__WEBPACK_IMPORTED_MODULE_4__.LiveAnnouncer)); };
+RecipeCreator.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: RecipeCreator, selectors: [["recipeCreator"]], viewQuery: function RecipeCreator_Query(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵviewQuery"](_angular_material_sort__WEBPACK_IMPORTED_MODULE_5__.MatSort, 5);
+    } if (rf & 2) {
+        let _t;
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.sort = _t.first);
+    } }, decls: 42, vars: 8, consts: [[1, "row", "border", "border-dark", "rounded-lg", "p-3", "m-1"], [1, "h3"], [1, "container", "p-0", "m-0"], [1, "card", "bg-dark", "table-responsive", "p-0", "m-0", "col", "col-12"], ["mat-table", "", "matSort", "", 1, "mat-elevation-z8", 3, "dataSource", "matSortChange"], ["matColumnDef", "name"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by name", 4, "matHeaderCellDef"], ["mat-cell", "", 4, "matCellDef"], ["matColumnDef", "weight"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by weight", 4, "matHeaderCellDef"], ["mat-cell", "", "class", "ml-1", 4, "matCellDef"], ["matColumnDef", "kcal"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by kcal", 4, "matHeaderCellDef"], ["matColumnDef", "carbs"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by carbs", 4, "matHeaderCellDef"], ["matColumnDef", "fats"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by fats", 4, "matHeaderCellDef"], ["matColumnDef", "proteins"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by proteins", 4, "matHeaderCellDef"], ["matColumnDef", "actions"], [4, "matHeaderCellDef"], [4, "matCellDef"], ["mat-header-row", "", 4, "matHeaderRowDef"], ["mat-row", "", 4, "matRowDef", "matRowDefColumns"], [1, "row", "mt-3"], [1, "col"], [1, "custom-file"], ["type", "file", "accept", "image/*", "id", "customFile", 1, "custom-file-input", 3, "disabled", "change"], ["for", "customFile", 1, "custom-file-label"], [1, "col-auto", "pl-sm-0"], ["type", "button", "ngbTooltip", "Upload", 1, "btn", "btn-light", "btn-block", 3, "disabled", "click"], ["class", "row mt-3", 4, "ngIf"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by name"], ["mat-cell", ""], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by weight"], ["mat-cell", "", 1, "ml-1"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by kcal"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by carbs"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by fats"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by proteins"], ["mat-button", "", 1, "btn", "btn-info", "ml-1"], ["mat-button", "", 1, "btn", "btn-danger", "ml-1"], ["mat-header-row", ""], ["mat-row", ""], [1, "progress"], ["role", "progressbar", "aria-valuemin", "0", "aria-valuemax", "100", 1, "progress-bar", 3, "ngStyle"], ["alt", "preview", 1, "rounded", "shadow", "w-100", 3, "src"]], template: function RecipeCreator_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0)(1, "h5", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2, "Recipe");
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](3, "mat-divider")(4, "br");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "div", 2)(6, "div", 3)(7, "div", 4)(8, "table", 5)(9, "thead", 6)(10, "tr", 7)(11, "th", 8);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](12, "#");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](13, "th");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](14, "Name");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](15, "th");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](16, "Weight");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](17, "th");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](18, "Kcal");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](19, "th");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](20, "Carbs");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](21, "th");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](22, "Fats");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](23, "th");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](24, "Proteins");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]()()();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](25, "tbody");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](26, RecipeCreator_tr_26_Template, 20, 22, "tr", 9);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](27, "tfoot")(28, "tr")(29, "td", 10)(30, "strong");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](31, "Total:");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "div", 2)(6, "div", 3)(7, "table", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("matSortChange", function RecipeCreator_Template_table_matSortChange_7_listener($event) { return ctx.announceSortChange($event); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerStart"](8, 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](9, RecipeCreator_th_9_Template, 2, 0, "th", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](10, RecipeCreator_td_10_Template, 2, 1, "td", 7);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerStart"](11, 8);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](12, RecipeCreator_th_12_Template, 2, 0, "th", 9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](13, RecipeCreator_td_13_Template, 3, 4, "td", 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerStart"](14, 11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](15, RecipeCreator_th_15_Template, 2, 0, "th", 12);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](16, RecipeCreator_td_16_Template, 3, 4, "td", 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerStart"](17, 13);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](18, RecipeCreator_th_18_Template, 2, 0, "th", 14);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](19, RecipeCreator_td_19_Template, 3, 4, "td", 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerStart"](20, 15);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](21, RecipeCreator_th_21_Template, 2, 0, "th", 16);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](22, RecipeCreator_td_22_Template, 3, 4, "td", 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerStart"](23, 17);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](24, RecipeCreator_th_24_Template, 2, 0, "th", 18);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](25, RecipeCreator_td_25_Template, 3, 4, "td", 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerStart"](26, 19);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](27, RecipeCreator_mat_header_cell_27_Template, 1, 0, "mat-header-cell", 20);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](28, RecipeCreator_mat_cell_28_Template, 5, 0, "mat-cell", 21);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementContainerEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](29, RecipeCreator_tr_29_Template, 1, 0, "tr", 22);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](30, RecipeCreator_tr_30_Template, 1, 0, "tr", 23);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]()();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](32, "td");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](34, "number");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](31, "div", 24)(32, "div", 25)(33, "div", 26)(34, "input", 27);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("change", function RecipeCreator_Template_input_change_34_listener($event) { return ctx.handleFileInput($event.target.files); });
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](35, "td");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](35, "label", 28);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](36);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](37, "number");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](38, "td");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](39);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](40, "number");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](41, "td");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](42);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](43, "number");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](44, "td");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](45);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](46, "number");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](47, "td");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](48);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](49, "number");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]()()()()()()()();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]()()();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](37, "div", 29)(38, "button", 30);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function RecipeCreator_Template_button_click_38_listener() { return ctx.upload(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](39, "Upload");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]()()();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](40, RecipeCreator_div_40_Template, 5, 5, "div", 31);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](41, RecipeCreator_div_41_Template, 3, 1, "div", 31);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]()();
     } if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](26);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", ctx.ingredients);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](7);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](34, 7, ctx.recipeSummary.name, "1.0-0"));
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](37, 10, ctx.recipeSummary.weight, "1.0-0"));
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](40, 13, ctx.recipeSummary.kcal, "1.0-0"));
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](43, 16, ctx.recipeSummary.carbs, "1.0-0"));
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](46, 19, ctx.recipeSummary.fats, "1.0-0"));
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind2"](49, 22, ctx.recipeSummary.proteins, "1.0-0"));
-    } }, dependencies: [_angular_common__WEBPACK_IMPORTED_MODULE_2__.NgForOf, _angular_material_divider__WEBPACK_IMPORTED_MODULE_3__.MatDivider, _angular_common__WEBPACK_IMPORTED_MODULE_2__.DecimalPipe], encapsulation: 2 });
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("dataSource", ctx.dataSource);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](22);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("matHeaderRowDef", ctx.displayedColumns);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("matRowDefColumns", ctx.displayedColumns);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("disabled", ctx.working);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](ctx.uploadFileLabel);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("disabled", ctx.working);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", ctx.working);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", ctx.uploadUrl == null ? null : ctx.uploadUrl.length);
+    } }, dependencies: [_angular_common__WEBPACK_IMPORTED_MODULE_6__.NgIf, _angular_common__WEBPACK_IMPORTED_MODULE_6__.NgStyle, _angular_material_divider__WEBPACK_IMPORTED_MODULE_7__.MatDivider, _angular_material_table__WEBPACK_IMPORTED_MODULE_2__.MatTable, _angular_material_table__WEBPACK_IMPORTED_MODULE_2__.MatHeaderCellDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_2__.MatHeaderRowDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_2__.MatColumnDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_2__.MatCellDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_2__.MatRowDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_2__.MatHeaderCell, _angular_material_table__WEBPACK_IMPORTED_MODULE_2__.MatCell, _angular_material_table__WEBPACK_IMPORTED_MODULE_2__.MatHeaderRow, _angular_material_table__WEBPACK_IMPORTED_MODULE_2__.MatRow, _angular_material_sort__WEBPACK_IMPORTED_MODULE_5__.MatSort, _angular_material_sort__WEBPACK_IMPORTED_MODULE_5__.MatSortHeader, _angular_common__WEBPACK_IMPORTED_MODULE_6__.DecimalPipe], encapsulation: 2 });
 
 
 /***/ }),
