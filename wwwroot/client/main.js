@@ -132,7 +132,9 @@ __webpack_require__.r(__webpack_exports__);
 class Creator {
     constructor(http) {
         this.http = http;
-        this.tableDataChanged = new rxjs__WEBPACK_IMPORTED_MODULE_0__.Subject();
+        this.tableDataPush = new rxjs__WEBPACK_IMPORTED_MODULE_0__.Subject();
+        this.tableDataPop = new rxjs__WEBPACK_IMPORTED_MODULE_0__.Subject();
+        this.tableDataEdit = new rxjs__WEBPACK_IMPORTED_MODULE_0__.Subject();
         this.ingredients = [];
         this.recipeIngredients = [];
         this.recipeSummary = {
@@ -215,9 +217,17 @@ class IngredientCreator {
             proteins:  false || ''
         };
     }
-    // było używane jedynie w ramach testu API
     ngOnInit() {
-        //this.creator.getIngredients("bread").subscribe();
+        //this.creator.getIngredients("bread").subscribe();     // było używane jedynie w ramach testu API
+        this.creator.tableDataEdit.subscribe((value) => {
+            let ingredientToEdit = this.creator.recipeIngredients.find(v => v.name = value.name);
+            this.ingredientTemplate.name = ingredientToEdit.name;
+            this.ingredientTemplate.weight = 0;
+            this.ingredientTemplate.kcal = Number(ingredientToEdit.kcal).toFixed(2);
+            this.ingredientTemplate.fats = Number(ingredientToEdit.fats).toFixed(2);
+            this.ingredientTemplate.carbs = Number(ingredientToEdit.carbs).toFixed(2);
+            this.ingredientTemplate.proteins = Number(ingredientToEdit.proteins).toFixed(2);
+        });
     }
     // update listy składników na liście rozwijanej kontrolki Autocomplete
     updateIngredientList(prefix) {
@@ -243,12 +253,12 @@ class IngredientCreator {
         if (ingredientTemplate.name != '') {
             console.log(ingredientTemplate.name);
             let ingredientCopy = { ...ingredientTemplate }; // shallow copy template
-            this.creator.tableDataChanged.next(ingredientCopy); // and push copy to recipeingredients
+            this.creator.tableDataPush.next(ingredientCopy); // and push copy to recipeingredients
         }
     }
 }
 IngredientCreator.ɵfac = function IngredientCreator_Factory(t) { return new (t || IngredientCreator)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_services_creator_service__WEBPACK_IMPORTED_MODULE_0__.Creator)); };
-IngredientCreator.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: IngredientCreator, selectors: [["ingredientCreator"]], inputs: { prefix: "prefix" }, decls: 30, vars: 9, consts: [[1, "row", "border", "border-dark", "rounded-lg", "p-3", "m-1"], [1, "h3"], [1, "container", "p-0", "m-0"], [1, "col", "col-10", "col-md-9", "p-2", "m-0", "d-inline-block"], ["type", "text", "name", "prefix", "matInput", "", "placeholder", "Search ingredient", 3, "ngModel", "matAutocomplete", "ngModelChange"], ["panelWidth", "auto", 3, "optionSelected"], ["auto", "matAutocomplete"], [3, "value", 4, "ngFor", "ngForOf"], [1, "col", "col-2", "col-md-3", "p-0", "m-0", "d-inline-block"], ["id", "addIngredientBtn", 1, "btn", "btn-light", "btn-block", 3, "click"], [1, "fas", "fa-plus", "fa-1x"], [1, "col", "col-12", "p-0", "m-0", "d-inline-block", "bg-dark", "rounded", "m-0", "p-1"], [1, "col", "col-6", "m-0", "p-0", "d-inline-block"], [1, "m-1", "p-1"], ["matInput", "", "required", "", "type", "text", "placeholder", "Name", "name", "name", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "placeholder", "Weight (g)", "name", "weight", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "min", "0", "max", "900", "placeholder", "Kcal per 100g", "name", "kcal", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "min", "0", "max", "100", "placeholder", "Carbohydrates per 100g", "name", "carbs", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "min", "0", "max", "100", "placeholder", "Fats per 100g", "name", "fats", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "min", "0", "max", "100", "placeholder", "Proteins per 100g", "name", "proteins", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], [3, "value"]], template: function IngredientCreator_Template(rf, ctx) { if (rf & 1) {
+IngredientCreator.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: IngredientCreator, selectors: [["ingredientCreator"]], inputs: { prefix: "prefix" }, decls: 30, vars: 9, consts: [[1, "row", "border", "border-dark", "rounded-lg", "p-3", "m-1", "mb-3"], [1, "h3"], [1, "container", "p-0", "m-0"], [1, "col", "col-10", "col-md-9", "p-2", "m-0", "d-inline-block"], ["type", "text", "name", "prefix", "matInput", "", "placeholder", "Search ingredient", 3, "ngModel", "matAutocomplete", "ngModelChange"], ["panelWidth", "auto", 3, "optionSelected"], ["auto", "matAutocomplete"], [3, "value", 4, "ngFor", "ngForOf"], [1, "col", "col-2", "col-md-3", "p-0", "m-0", "d-inline-block"], ["id", "addIngredientBtn", 1, "btn", "btn-light", "btn-block", 3, "click"], [1, "fas", "fa-plus", "fa-1x"], [1, "col", "col-12", "p-0", "m-0", "d-inline-block", "bg-dark", "rounded", "m-0", "p-1"], [1, "col", "col-6", "m-0", "p-0", "d-inline-block"], [1, "m-1", "p-1"], ["matInput", "", "required", "", "type", "text", "placeholder", "Name", "name", "name", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "placeholder", "Weight (g)", "name", "weight", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "min", "0", "max", "900", "placeholder", "Kcal per 100g", "name", "kcal", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "min", "0", "max", "100", "placeholder", "Carbohydrates per 100g", "name", "carbs", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "min", "0", "max", "100", "placeholder", "Fats per 100g", "name", "fats", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], ["matInput", "", "numbersOnly", "", "required", "", "type", "number", "min", "0", "max", "100", "placeholder", "Proteins per 100g", "name", "proteins", 1, "mat-form-field", "m-0", "p-1", 3, "ngModel", "ngModelChange"], [3, "value"]], template: function IngredientCreator_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0)(1, "h5", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2, "Ingredient");
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
@@ -427,10 +437,13 @@ function RecipeCreator_mat_header_cell_27_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](0, "mat-header-cell");
 } }
 function RecipeCreator_mat_cell_28_Template(rf, ctx) { if (rf & 1) {
+    const _r27 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "mat-cell")(1, "button", 40);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function RecipeCreator_mat_cell_28_Template_button_click_1_listener() { const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r27); const element_r25 = restoredCtx.$implicit; const ctx_r26 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵresetView"](ctx_r26.editIngredient(element_r25)); });
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2, "Edit");
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "button", 41);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function RecipeCreator_mat_cell_28_Template_button_click_3_listener() { const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r27); const element_r25 = restoredCtx.$implicit; const ctx_r28 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](); return _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵresetView"](ctx_r28.deleteIngredient(element_r25)); });
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](4, "Delete");
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]()();
 } }
@@ -485,17 +498,36 @@ class RecipeCreator {
         this.recipeSummary = creator.recipeSummary;
     }
     ngOnInit() {
-        this.creator.tableDataChanged.subscribe((value) => {
+        this.creator.tableDataPush.subscribe((value) => {
             this.creator.recipeIngredients.push(value);
             let temp = this.creator.recipeIngredients;
             this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_2__.MatTableDataSource(temp);
             this.dataSource.sort = this.sort;
-            this.creator.recipeSummary.weight = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.weight), 0);
-            this.creator.recipeSummary.kcal = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.kcal), 0);
-            this.creator.recipeSummary.carbs = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.carbs), 0);
-            this.creator.recipeSummary.fats = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.fats), 0);
-            this.creator.recipeSummary.proteins = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.proteins), 0);
+            this.RefreshSummary();
         });
+        this.creator.tableDataPop.subscribe((value) => {
+            let position = this.creator.recipeIngredients.findIndex(v => v.name = value.name);
+            this.creator.recipeIngredients.splice(position, 1);
+            let temp = this.creator.recipeIngredients;
+            this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_2__.MatTableDataSource(temp);
+            this.dataSource.sort = this.sort;
+            this.RefreshSummary();
+        });
+        this.creator.tableDataEdit.subscribe((value) => {
+            let position = this.creator.recipeIngredients.findIndex(v => v.name = value.name);
+            this.creator.recipeIngredients.splice(position, 1);
+            let temp = this.creator.recipeIngredients;
+            this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_2__.MatTableDataSource(temp);
+            this.dataSource.sort = this.sort;
+            this.RefreshSummary();
+        });
+    }
+    RefreshSummary() {
+        this.creator.recipeSummary.weight = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.weight), 0);
+        this.creator.recipeSummary.kcal = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.kcal), 0);
+        this.creator.recipeSummary.carbs = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.carbs), 0);
+        this.creator.recipeSummary.fats = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.fats), 0);
+        this.creator.recipeSummary.proteins = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.proteins), 0);
     }
     // RECIPE IMAGE UPLOAD
     handleFileInput(files) {
@@ -544,6 +576,15 @@ class RecipeCreator {
             this._liveAnnouncer.announce('Sorting cleared');
         }
     }
+    editIngredient(ingredient) {
+        this.creator.tableDataEdit.next(ingredient);
+        this.creator.tableDataPop.next(ingredient);
+        console.log(ingredient);
+    }
+    deleteIngredient(ingredient) {
+        this.creator.tableDataPop.next(ingredient);
+        console.log(ingredient);
+    }
 }
 RecipeCreator.ɵfac = function RecipeCreator_Factory(t) { return new (t || RecipeCreator)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_services_creator_service__WEBPACK_IMPORTED_MODULE_0__.Creator), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_3__.HttpClient), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_cdk_a11y__WEBPACK_IMPORTED_MODULE_4__.LiveAnnouncer)); };
 RecipeCreator.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: RecipeCreator, selectors: [["recipeCreator"]], viewQuery: function RecipeCreator_Query(rf, ctx) { if (rf & 1) {
@@ -551,7 +592,7 @@ RecipeCreator.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["
     } if (rf & 2) {
         let _t;
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.sort = _t.first);
-    } }, decls: 42, vars: 8, consts: [[1, "row", "border", "border-dark", "rounded-lg", "p-3", "m-1"], [1, "h3"], [1, "container", "p-0", "m-0"], [1, "card", "bg-dark", "table-responsive", "p-0", "m-0", "col", "col-12"], ["mat-table", "", "matSort", "", 1, "mat-elevation-z8", 3, "dataSource", "matSortChange"], ["matColumnDef", "name"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by name", 4, "matHeaderCellDef"], ["mat-cell", "", 4, "matCellDef"], ["matColumnDef", "weight"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by weight", 4, "matHeaderCellDef"], ["mat-cell", "", "class", "ml-1", 4, "matCellDef"], ["matColumnDef", "kcal"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by kcal", 4, "matHeaderCellDef"], ["matColumnDef", "carbs"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by carbs", 4, "matHeaderCellDef"], ["matColumnDef", "fats"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by fats", 4, "matHeaderCellDef"], ["matColumnDef", "proteins"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by proteins", 4, "matHeaderCellDef"], ["matColumnDef", "actions"], [4, "matHeaderCellDef"], [4, "matCellDef"], ["mat-header-row", "", 4, "matHeaderRowDef"], ["mat-row", "", 4, "matRowDef", "matRowDefColumns"], [1, "row", "mt-3"], [1, "col"], [1, "custom-file"], ["type", "file", "accept", "image/*", "id", "customFile", 1, "custom-file-input", 3, "disabled", "change"], ["for", "customFile", 1, "custom-file-label"], [1, "col-auto", "pl-sm-0"], ["type", "button", "ngbTooltip", "Upload", 1, "btn", "btn-light", "btn-block", 3, "disabled", "click"], ["class", "row mt-3", 4, "ngIf"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by name"], ["mat-cell", ""], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by weight"], ["mat-cell", "", 1, "ml-1"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by kcal"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by carbs"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by fats"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by proteins"], ["mat-button", "", 1, "btn", "btn-info", "ml-1"], ["mat-button", "", 1, "btn", "btn-danger", "ml-1"], ["mat-header-row", ""], ["mat-row", ""], [1, "progress"], ["role", "progressbar", "aria-valuemin", "0", "aria-valuemax", "100", 1, "progress-bar", 3, "ngStyle"], ["alt", "preview", 1, "rounded", "shadow", "w-100", 3, "src"]], template: function RecipeCreator_Template(rf, ctx) { if (rf & 1) {
+    } }, decls: 42, vars: 8, consts: [[1, "row", "border", "border-dark", "rounded-lg", "p-3", "m-1", "mb-3"], [1, "h3"], [1, "container", "p-0", "m-0"], [1, "card", "bg-dark", "table-responsive", "p-0", "m-0", "col", "col-12"], ["mat-table", "", "matSort", "", 1, "mat-elevation-z8", 3, "dataSource", "matSortChange"], ["matColumnDef", "name"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by name", 4, "matHeaderCellDef"], ["mat-cell", "", 4, "matCellDef"], ["matColumnDef", "weight"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by weight", 4, "matHeaderCellDef"], ["mat-cell", "", "class", "ml-1", 4, "matCellDef"], ["matColumnDef", "kcal"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by kcal", 4, "matHeaderCellDef"], ["matColumnDef", "carbs"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by carbs", 4, "matHeaderCellDef"], ["matColumnDef", "fats"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by fats", 4, "matHeaderCellDef"], ["matColumnDef", "proteins"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by proteins", 4, "matHeaderCellDef"], ["matColumnDef", "actions"], [4, "matHeaderCellDef"], [4, "matCellDef"], ["mat-header-row", "", 4, "matHeaderRowDef"], ["mat-row", "", 4, "matRowDef", "matRowDefColumns"], [1, "row", "mt-3"], [1, "col"], [1, "custom-file"], ["type", "file", "accept", "image/*", "id", "customFile", 1, "custom-file-input", 3, "disabled", "change"], ["for", "customFile", 1, "custom-file-label"], [1, "col-auto", "pl-sm-0"], ["type", "button", "ngbTooltip", "Upload", 1, "btn", "btn-light", "btn-block", 3, "disabled", "click"], ["class", "row mt-3", 4, "ngIf"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by name"], ["mat-cell", ""], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by weight"], ["mat-cell", "", 1, "ml-1"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by kcal"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by carbs"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by fats"], ["mat-header-cell", "", "mat-sort-header", "", "sortActionDescription", "Sort by proteins"], ["mat-button", "", 1, "btn", "btn-info", "ml-1", 3, "click"], ["mat-button", "", 1, "btn", "btn-danger", "ml-1", 3, "click"], ["mat-header-row", ""], ["mat-row", ""], [1, "progress"], ["role", "progressbar", "aria-valuemin", "0", "aria-valuemax", "100", 1, "progress-bar", 3, "ngStyle"], ["alt", "preview", 1, "rounded", "shadow", "w-100", 3, "src"]], template: function RecipeCreator_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0)(1, "h5", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2, "Recipe");
         _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();

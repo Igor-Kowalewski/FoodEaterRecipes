@@ -2951,7 +2951,9 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   \********************************************************************************************************************************************************************************************************/
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
+html, body {
+    height: 100%;
+}
 
 /*angular sobie wymy�la override css i wywala problemy*/
 
@@ -2972,5 +2974,10 @@ mat-divider {
 .mat-cell {
     padding: 8px 8px 8px 8px !important;
 }
+
+#body {
+    padding-bottom: 60px !important;
+}
+
 
 /*# sourceMappingURL=styles.css.map*/

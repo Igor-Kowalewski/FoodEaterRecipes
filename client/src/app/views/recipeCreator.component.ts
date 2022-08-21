@@ -48,7 +48,7 @@ export default class RecipeCreator {
 
 
     ngOnInit() {
-        this.creator.tableDataChanged.subscribe((value) => {
+        this.creator.tableDataPush.subscribe((value) => {
 
             this.creator.recipeIngredients.push(value)
             let temp = this.creator.recipeIngredients
@@ -56,14 +56,42 @@ export default class RecipeCreator {
             this.dataSource = new MatTableDataSource(temp)
             this.dataSource.sort = this.sort;
 
-            this.creator.recipeSummary.weight = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.weight), 0);
-            this.creator.recipeSummary.kcal = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.kcal), 0);
-            this.creator.recipeSummary.carbs = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.carbs), 0);
-            this.creator.recipeSummary.fats = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.fats), 0);
-            this.creator.recipeSummary.proteins = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.proteins), 0);
+            this.RefreshSummary();
+        });
+
+        this.creator.tableDataPop.subscribe((value) => {
+
+            let position = this.creator.recipeIngredients.findIndex(v => v.name = value.name)
+            this.creator.recipeIngredients.splice(position,1)
+            let temp = this.creator.recipeIngredients
+
+            this.dataSource = new MatTableDataSource(temp)
+            this.dataSource.sort = this.sort;
+
+            this.RefreshSummary();
+        });
+
+        this.creator.tableDataEdit.subscribe((value) => {
+
+            let position = this.creator.recipeIngredients.findIndex(v => v.name = value.name)
+            this.creator.recipeIngredients.splice(position, 1)
+            let temp = this.creator.recipeIngredients
+
+            this.dataSource = new MatTableDataSource(temp)
+            this.dataSource.sort = this.sort;
+
+            this.RefreshSummary();
         });
     }
 
+
+    private RefreshSummary() {
+        this.creator.recipeSummary.weight = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.weight), 0);
+        this.creator.recipeSummary.kcal = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.kcal), 0);
+        this.creator.recipeSummary.carbs = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.carbs), 0);
+        this.creator.recipeSummary.fats = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.fats), 0);
+        this.creator.recipeSummary.proteins = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.proteins), 0);
+    }
 
 
     // RECIPE IMAGE UPLOAD
@@ -124,4 +152,19 @@ export default class RecipeCreator {
             this._liveAnnouncer.announce('Sorting cleared');
         }
     }
+
+
+    editIngredient(ingredient: Ingredient) {
+        this.creator.tableDataEdit.next(ingredient);
+        this.creator.tableDataPop.next(ingredient);
+
+        console.log(ingredient)
+    }
+
+    deleteIngredient(ingredient: Ingredient) {
+        this.creator.tableDataPop.next(ingredient);
+
+        console.log(ingredient)
+    }
+
 }

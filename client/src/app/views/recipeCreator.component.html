@@ -1,4 +1,4 @@
-﻿<div class="row border border-dark rounded-lg p-3 m-1">
+﻿<div class="row border border-dark rounded-lg p-3 m-1 mb-3">
     <h5 class="h3">Recipe</h5>
     <mat-divider></mat-divider>
     <br>
@@ -106,9 +106,9 @@
                 <ng-container matColumnDef="actions">
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                     <mat-cell *matCellDef="let row, let element">
-                        <!-- element przekazuje nazwę albo wiersz danego składnika! -->
-                        <button class="btn btn-info ml-1" mat-button>Edit</button>
-                        <button class="btn btn-danger ml-1" mat-button>Delete</button>
+                        <!-- 'element' przekazuje nazwę albo wiersz danego składnika! -->
+                        <button class="btn btn-info ml-1" (click)="editIngredient(element)" mat-button>Edit</button>
+                        <button class="btn btn-danger ml-1" (click)="deleteIngredient(element)" mat-button>Delete</button>
                     </mat-cell>
                 </ng-container>
 

@@ -7,7 +7,10 @@ import { Ingredient } from "../shared/Ingredient";
 @Injectable()
  export class Creator {
 
-    public tableDataChanged: Subject<Ingredient> = new Subject<Ingredient>();
+    public tableDataPush: Subject<Ingredient> = new Subject<Ingredient>();
+    public tableDataPop: Subject<Ingredient> = new Subject<Ingredient>();
+    public tableDataEdit: Subject<Ingredient> = new Subject<Ingredient>();
+
     public ingredients: Ingredient[] = [];
     public recipeIngredients: Ingredient[] = [];
     public recipeSummary: Ingredient = {

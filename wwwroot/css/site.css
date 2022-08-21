@@ -74,11 +74,27 @@
     list-style: none;
 }
 
+#body {
+    padding-bottom: 60px !important;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    overflow-y: scroll;
+    background: #f7f7f7;
+    box-shadow: inset 0 0 2px #292b2c;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #999999;
+    border-radius: 10px;
+}
 
 /* Provide sufficient contrast against white background */
 /*a {
   color: #0366d6;
-}
+}s
 
 .btn-primary {
   color: #fff;

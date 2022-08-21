@@ -30,9 +30,20 @@ export default class IngredientCreator {
     }
 
 
-    // było używane jedynie w ramach testu API
     ngOnInit(): void {
-        //this.creator.getIngredients("bread").subscribe();
+        //this.creator.getIngredients("bread").subscribe();     // było używane jedynie w ramach testu API
+
+        this.creator.tableDataEdit.subscribe((value) => {
+
+            let ingredientToEdit = this.creator.recipeIngredients.find(v => v.name = value.name)
+
+            this.ingredientTemplate.name = ingredientToEdit!.name;
+            this.ingredientTemplate.weight = 0;
+            this.ingredientTemplate.kcal = Number(ingredientToEdit!.kcal).toFixed(2);
+            this.ingredientTemplate.fats = Number(ingredientToEdit!.fats).toFixed(2);
+            this.ingredientTemplate.carbs = Number(ingredientToEdit!.carbs).toFixed(2);
+            this.ingredientTemplate.proteins = Number(ingredientToEdit!.proteins).toFixed(2);
+        });
     }
 
 
@@ -69,7 +80,7 @@ export default class IngredientCreator {
             console.log(ingredientTemplate.name);
 
             let ingredientCopy: Ingredient = { ...ingredientTemplate }; // shallow copy template
-            this.creator.tableDataChanged.next(ingredientCopy); // and push copy to recipeingredients
+            this.creator.tableDataPush.next(ingredientCopy); // and push copy to recipeingredients
         }
     }
 }
