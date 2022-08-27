@@ -11,22 +11,13 @@ import { Ingredient } from "../shared/Ingredient";
     public tableDataPop: Subject<Ingredient> = new Subject<Ingredient>();
     public tableDataEdit: Subject<Ingredient> = new Subject<Ingredient>();
 
-    public ingredients: Ingredient[] = [];
+    public searchIngredients: Ingredient[] = [];
     public recipeIngredients: Ingredient[] = [];
-    public recipeSummary: Ingredient = {
-        name: null || '',
-        weight: null || 0,
-        kcal: null || 0,
-        carbs: null || 0,
-        fats: null || 0,
-        proteins: null || 0
-    }
-
+    public recipeSummary: Ingredient = new Ingredient;
 
     constructor(private http: HttpClient) {
 
     }
-
 
     // Zapytanie do kontrolera a następnie api@nutritionix.com
     getIngredients(prefix: string): Observable<void> {
@@ -38,7 +29,7 @@ import { Ingredient } from "../shared/Ingredient";
 
         return this.http.get<Ingredient[]>(url, { headers: headers, params: params })
             .pipe(map(data => {
-                this.ingredients = data // tutaj trza poprawić 
+                this.searchIngredients = data
                 return;
             }));
     }

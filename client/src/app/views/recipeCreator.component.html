@@ -105,16 +105,19 @@
                 <!-- Edit, Delete -->
                 <ng-container matColumnDef="actions">
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                    <mat-cell *matCellDef="let row, let element">
+                    <mat-cell *matCellDef="let element">
                         <!-- 'element' przekazuje nazwę albo wiersz danego składnika! -->
-                        <button class="btn btn-info ml-1" (click)="editIngredient(element)" mat-button>Edit</button>
-                        <button class="btn btn-danger ml-1" (click)="deleteIngredient(element)" mat-button>Delete</button>
+                        <button class="btn btn-info ml-1" (click)="editIngredient(element)" mat-button><fa-icon [icon]="faPenToSquare"></fa-icon></button>
+                        <button class="btn btn-danger ml-1" (click)="deleteIngredient(element)" mat-button>
+                            <fa-icon [icon]="faTrash"></fa-icon>
+                        </button>
                     </mat-cell>
                 </ng-container>
 
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
             </table>
         </div>
 

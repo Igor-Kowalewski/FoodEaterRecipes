@@ -14,14 +14,7 @@ export default class IngredientCreator {
 
     public ingredientSelected: string = "";       // opcja wybrana na liście rozwijanej Autocomplete
 
-    public ingredientTemplate: Ingredient = {
-        name: null || '',
-        weight: null || '',
-        kcal: null || '',
-        carbs: null || '',
-        fats: null || '',
-        proteins: null || ''
-    }
+    public ingredientTemplate: Ingredient = new Ingredient;
 
 
     // inicjalizacja serwisu Creator - pobieranie danych z API do backendu i z backendu do frontendu
@@ -34,15 +27,8 @@ export default class IngredientCreator {
         //this.creator.getIngredients("bread").subscribe();     // było używane jedynie w ramach testu API
 
         this.creator.tableDataEdit.subscribe((value) => {
-
-            let ingredientToEdit = this.creator.recipeIngredients.find(v => v.name = value.name)
-
-            this.ingredientTemplate.name = ingredientToEdit!.name;
-            this.ingredientTemplate.weight = 0;
-            this.ingredientTemplate.kcal = Number(ingredientToEdit!.kcal).toFixed(2);
-            this.ingredientTemplate.fats = Number(ingredientToEdit!.fats).toFixed(2);
-            this.ingredientTemplate.carbs = Number(ingredientToEdit!.carbs).toFixed(2);
-            this.ingredientTemplate.proteins = Number(ingredientToEdit!.proteins).toFixed(2);
+            let ingredientToEdit = this.creator.recipeIngredients.find(v => JSON.stringify(v) === JSON.stringify(value));
+            this.ingredientTemplate = new Ingredient(ingredientToEdit);
         });
     }
 
@@ -58,29 +44,21 @@ export default class IngredientCreator {
     setTemplateIngredient(ingredientSelected: string) {
         this.ingredientSelected = ingredientSelected;
 
-        let temp = this.creator.ingredients.find((i) => { return i.name === ingredientSelected });
+        let temp = this.creator.searchIngredients.find((i) => { return i.name === ingredientSelected });
 
         if (temp !== undefined) {
-            this.ingredientTemplate.name = temp.name;
-            this.ingredientTemplate.weight = 0;
-            this.ingredientTemplate.kcal = Number(temp.kcal).toFixed(2);
-            this.ingredientTemplate.fats = Number(temp.fats).toFixed(2);
-            this.ingredientTemplate.carbs = Number(temp.carbs).toFixed(2);
-            this.ingredientTemplate.proteins = Number(temp.proteins).toFixed(2);
+            this.ingredientTemplate = new Ingredient(temp);
+            console.log(this.ingredientTemplate);
         }
-
-        console.log(this.ingredientTemplate);
+        else {
+            console.log("Autocomplete problem occured:" + this.ingredientTemplate.name);
+        }
     }
 
 
     // dodawanie nowego składnika do przepisu
     addIngredient(ingredientTemplate: Ingredient) {
-        if (ingredientTemplate.name != '')
-        {
-            console.log(ingredientTemplate.name);
-
-            let ingredientCopy: Ingredient = { ...ingredientTemplate }; // shallow copy template
-            this.creator.tableDataPush.next(ingredientCopy); // and push copy to recipeingredients
-        }
+        let ingredientCopy: Ingredient = new Ingredient(ingredientTemplate); // shallow copy template
+        this.creator.tableDataPush.next(ingredientCopy); // and push copy to recipeingredients
     }
 }

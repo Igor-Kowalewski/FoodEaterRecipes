@@ -6,7 +6,7 @@ import { Ingredient } from "../shared/Ingredient";
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
+import { faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -18,14 +18,9 @@ import { MatTableDataSource } from '@angular/material/table';
 export default class RecipeCreator {
 
     public ingredients: Ingredient[] = [];
-    public recipeSummary: Ingredient = {
-        name: null || '',
-        weight: null || 0,
-        kcal: null || 0,
-        carbs: null || 0,
-        fats: null || 0,
-        proteins: null || 0
-    }
+    public recipeSummary: Ingredient = new Ingredient;
+    public faTrash;
+    public faPenToSquare;
 
 
     working = false;
@@ -44,24 +39,32 @@ export default class RecipeCreator {
     constructor(private creator: Creator, private http: HttpClient, private _liveAnnouncer: LiveAnnouncer) {
         this.ingredients = creator.recipeIngredients;
         this.recipeSummary = creator.recipeSummary;
+        this.faTrash = faTrash;
+        this.faPenToSquare = faPenToSquare;
     }
 
 
     ngOnInit() {
         this.creator.tableDataPush.subscribe((value) => {
 
-            this.creator.recipeIngredients.push(value)
-            let temp = this.creator.recipeIngredients
+            if (Ingredient.isValid(value)) {
+                this.creator.recipeIngredients.push(value)
+                console.log("Adding ingredient: " + value.name)
+                let temp = this.creator.recipeIngredients
 
-            this.dataSource = new MatTableDataSource(temp)
-            this.dataSource.sort = this.sort;
+                this.dataSource = new MatTableDataSource(temp)
+                this.dataSource.sort = this.sort;
 
-            this.RefreshSummary();
+                this.RefreshSummary();
+            }
+            else {
+                console.log("Ingredient invalid: " + value.name)
+            }
         });
 
         this.creator.tableDataPop.subscribe((value) => {
-
-            let position = this.creator.recipeIngredients.findIndex(v => v.name = value.name)
+            let position = this.creator.recipeIngredients.findIndex(v => JSON.stringify(v) === JSON.stringify(value))
+            console.log("Deleting ingredient: " + position + ". " + value.name)
             this.creator.recipeIngredients.splice(position,1)
             let temp = this.creator.recipeIngredients
 
@@ -72,8 +75,8 @@ export default class RecipeCreator {
         });
 
         this.creator.tableDataEdit.subscribe((value) => {
-
-            let position = this.creator.recipeIngredients.findIndex(v => v.name = value.name)
+            let position = this.creator.recipeIngredients.findIndex(v => JSON.stringify(v) === JSON.stringify(value))
+            console.log("Edit ingredient: " + position + ". " + value.name)
             this.creator.recipeIngredients.splice(position, 1)
             let temp = this.creator.recipeIngredients
 
@@ -91,10 +94,11 @@ export default class RecipeCreator {
         this.creator.recipeSummary.carbs = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.carbs), 0);
         this.creator.recipeSummary.fats = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.fats), 0);
         this.creator.recipeSummary.proteins = this.creator.recipeIngredients.reduce((sum, current) => sum + Number(current.proteins), 0);
+        console.log("Refreshing recipe summary");
     }
 
 
-    // RECIPE IMAGE UPLOAD
+    /// RECIPE IMAGE UPLOAD
     handleFileInput(files: FileList) {
         if (files.length > 0) {
             this.uploadFile = files.item(0);
@@ -135,17 +139,17 @@ export default class RecipeCreator {
     }
 
 
-    // RECIPE INGREDIENTS TABLE
+    /// RECIPE INGREDIENTS TABLE
     @ViewChild(MatSort) sort!: MatSort;
 
 
-    /** Announce the change in sort state for assistive technology. */
+    /// Announce the change in sort state for assistive technology.
     announceSortChange(sortState: Sort) {
 
-        // This example uses English messages. If your application supports
-        // multiple language, you would internationalize these strings.
-        // Furthermore, you can customize the message to add additional
-        // details about the values being sorted.
+        /// This example uses English messages. If your application supports
+        /// multiple language, you would internationalize these strings.
+        /// Furthermore, you can customize the message to add additional
+        /// details about the values being sorted.
         if (sortState.direction) {
             this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
         } else {
@@ -156,15 +160,10 @@ export default class RecipeCreator {
 
     editIngredient(ingredient: Ingredient) {
         this.creator.tableDataEdit.next(ingredient);
-        this.creator.tableDataPop.next(ingredient);
-
-        console.log(ingredient)
     }
 
     deleteIngredient(ingredient: Ingredient) {
         this.creator.tableDataPop.next(ingredient);
-
-        console.log(ingredient)
     }
 
 }

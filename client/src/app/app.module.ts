@@ -15,6 +15,7 @@ import { MatListModule } from "@angular/material/list";
 import { MatTableModule } from '@angular/material/table'
 //import { NgbdSortableHeader } from './directives/sortable.directive';
 import { MatSortModule } from '@angular/material/sort';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 
@@ -35,7 +36,8 @@ import { MatSortModule } from '@angular/material/sort';
         MatDividerModule,
         MatListModule,
         MatTableModule,
-        MatSortModule
+        MatSortModule,
+        FontAwesomeModule
     ],
     exports: [
         MatAutocompleteModule,
