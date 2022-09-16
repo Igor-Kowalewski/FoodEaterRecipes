@@ -2,6 +2,8 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Creator } from "../services/creator.service";
 import { Ingredient } from "../shared/Ingredient";
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
 
 
 @Component({
@@ -13,13 +15,13 @@ export default class IngredientCreator {
     @Input() prefix!: string;            // wzorzec używany do wyszukiwania w API składników
 
     public ingredientSelected: string = "";       // opcja wybrana na liście rozwijanej Autocomplete
-
     public ingredientTemplate: Ingredient = new Ingredient;
+    public faPlus;
 
 
     // inicjalizacja serwisu Creator - pobieranie danych z API do backendu i z backendu do frontendu
     constructor(public creator: Creator) {
-
+        this.faPlus = faPlus;
     }
 
 

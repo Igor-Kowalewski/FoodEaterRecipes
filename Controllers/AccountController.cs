@@ -46,17 +46,22 @@ namespace FoodEaterRecipes.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginDTO dto)
         {
+            _logger.Log(LogLevel.Information, $"User {dto.Username} is trying to login");
+
+
             if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(dto.Username, 
                     dto.Password,
                     dto.RememberMe,
                     false);
-                
+
+                _logger.Log(LogLevel.Information, $"User {dto.Username} data model is valid");
 
                 if (result.Succeeded)
                 {
-                    if(Request.Query.Keys.Contains("ReturnUrl")) 
+                    _logger.Log(LogLevel.Information, $"User {dto.Username} successfully login");
+                    if (Request.Query.Keys.Contains("ReturnUrl")) 
                     {
                         return Redirect(Request.Query["ReturnUrl"].First()); /// POWRÓT NP. Z WIDOKU CREATE
                     }
@@ -67,6 +72,7 @@ namespace FoodEaterRecipes.Controllers
                 }
             }
 
+            _logger.Log(LogLevel.Information, $"User {dto.Username} login failed");
             ModelState.AddModelError("", "Failed to login");
 
             return View();

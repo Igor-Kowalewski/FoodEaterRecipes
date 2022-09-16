@@ -1,9 +1,31 @@
-﻿@{
+﻿@model RecipeDTO
+@{
     ViewData["Title"] = "Home page";
 }
 
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    @*<script src="~/lib/jqueryui/jquery-ui.js"></script>*@
+    @*<link href="~/lib/jqueryui/themes/smoothness/jquery-ui.css" rel="stylesheet" />*@
 
-<div class="text-center">
-    <h1 class="display-4">Welcome Foodeater!</h1>
-    <p>Search for healthy recipe:</p>
+    @* Wyszukiwarka Autocomplete wymaga jquery-ui zawartego poniżej *@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css" integrity="sha512-Q2qvb9omuMvaoo6ofA3xaiD3b1aA7BlQGYxEOTij6i4HRsDNB7K2uEUHbbymUqqFDduToacMzKNYYVRwe4H2yw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+}
+
+<div class="row">
+    <div class="col-12 text-center p-0 m-0 ">
+        <h1 id="welcome" class="display-4">Hello Foodeater!</h1>
+    </div>
+</div>
+
+<div class="row text-center justify-content-center p-0 m-0">
+    <form method="get" class="col-12 m-0 p-0" asp-controller="App" asp-action="Recipe">
+        <div class="col-12 m-0 p-0 float-left">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control m-0 w-100 text-center", @id = "SearchInputRecipes", @placeholder = "Pizza? Pasta?" } })
+        </div>
+        <div class="col-3 m-0 p-0 float-right">
+            <button id="SearchInputRecipesBtn" type="submit" class="btn w-100"><i class="fas fa-search fa-1x"></i></button>
+        </div>
+    </form>
 </div>

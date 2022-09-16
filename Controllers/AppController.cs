@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,19 +37,31 @@ namespace FoodEaterRecipes.Controllers
             return View();
         }
 
-        [HttpGet("Recipes")]
-        public IActionResult Recipes()
+        [HttpGet("Recipes/{page?}")]
+        public IActionResult Recipes(int? page)
         {
             //ViewData["Recipes"] = new SelectList(_repository.GetAllRecipes(), "Id", "Name");
             
             IEnumerable<Recipe> response = _repository.GetAllRecipes();
             if (response != null && response.GetEnumerator().MoveNext())
             {
-                ViewBag.SearchResultRecipes = _repository.GetAllRecipes();
+                int pageSize = 6;
+                page = page == null ? 1 : page; 
+                int pageNumber = (int)(page == 0 ? 1 : page);
+
+                if (pageNumber > Math.Ceiling((float)response.Count() / pageSize))
+                    return RedirectToPage("/Error");
+
+                ViewBag.TotalPages = Math.Ceiling((float)response.Count() / pageSize);
+                ViewBag.ActualPage = pageNumber;
+                ViewBag.SearchResultRecipes = response.ToPagedList(pageNumber, pageSize);
                 ViewBag.AbsolutePath = _environment.WebRootPath + $"\\src\\";
+
+
+                return View();
             }
 
-            return View();
+            return RedirectToPage("/Error");
         }
 
         [HttpPost("Recipes")]
@@ -141,10 +153,34 @@ namespace FoodEaterRecipes.Controllers
         }
 
 
+        [HttpGet("Recipe")]
+        public IActionResult Recipe(string Name)
+        {
+            Recipe response = _repository.GetRecipeByName(Name);
+            if (response != null)
+            {
+                //ViewBag.SearchResultRecipe = _repository.GetRecipeByName(Name);
+                ViewBag.AbsolutePath = _environment.WebRootPath + $"\\src\\";
+
+                return View(response);
+            }
+
+            return RedirectToPage("/Error");
+        }
+
+
         [HttpGet("Recipe/{id}")]
         public IActionResult Recipe(int id)
         {
-            return View(id);
+            Recipe response = _repository.GetRecipeById(id);
+            if (response != null)
+            {
+                //ViewBag.SearchResultRecipe = _repository.GetRecipeById(id);
+                ViewBag.AbsolutePath = _environment.WebRootPath + $"\\src\\";
+                return View(response);
+            }
+
+            return RedirectToPage("/Error");
         }
 
 

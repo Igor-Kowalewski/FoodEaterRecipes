@@ -1,4 +1,5 @@
-﻿@model RecipeDTO
+﻿@using PagedList.Mvc;
+@model RecipeDTO
 @{
     ViewData["Title"] = "Recipes";
 }
@@ -12,35 +13,36 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css" integrity="sha512-Q2qvb9omuMvaoo6ofA3xaiD3b1aA7BlQGYxEOTij6i4HRsDNB7K2uEUHbbymUqqFDduToacMzKNYYVRwe4H2yw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 }
 
-
-<div class="container">
-    
-    <form method="post">
-        <div class="form-group">
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @id = "SearchInputRecipes", @placeholder = "Search..." } })
+<div id="recipesNav" class="row justify-content-around">
+    <form method="get" class="col-sm-12 col-md-10 m-0 p-2 pb-0 pb-md-2" asp-controller="App" asp-action="Recipe">
+        <div id="Recipes" class="col-sm-12 col-md-9 col-lg-10 m-0 p-0 pr-md-2 float-left">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control m-0 w-100", @id = "SearchInputRecipes", @placeholder = "Search..." } })
         </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-dark"><i class="fas fa-search fa-1x"></i> Search</button>
+        <div id="Recipes" class="col-sm-12 col-md-3 col-lg-2 m-0 mt-2 mt-md-0 pl-md-3 p-0 float-right">
+            <button id="button" type="submit" class="btn w-100"><i class="fas fa-search fa-1x"></i> Search</button>
         </div>
     </form>
 
+    <div id="Recipes" class="col-sm-12 col-md-2 m-0 p-0 pl-2 pr-2 pb-2 pt-md-2">
+        <a id="button" class="btn btn-info w-100" asp-controller="App" asp-action="Create"><i class="fa fa-plus fa-1x"></i> Create</a>
+    </div>
+</div>
 
-    <a class="btn btn-info" asp-controller="App" asp-action="Create"> Add New! </a>
 
-
-    <div class="row justify-content-around">
-        @if (ViewBag.SearchResultRecipes != null)
+<div id="recipesContent" class="row mt-3 d-flex justify-content-center">
+    @if (ViewBag.SearchResultRecipes != null)
+    {
+        foreach (var r in ViewBag.SearchResultRecipes)
         {
-            foreach (var r in ViewBag.SearchResultRecipes)
-            {
-                <div class="card col-md-3 recipe-info m-1 mb-2 p-0 bg-dark text-white shadow-lg border-0">
+            <div class="col-sm-12 col-md-4 col-xl-3 m-0 p-2">
+                <div id="recipesCard" class="card recipe-info m-0 p-0 bg-dark text-white shadow-lg">
 
                     @* If file in wwwroot\src\guid.jpg exists then draw an image *@
                     @{
                         var filePath = ViewBag.AbsolutePath + Convert.ToString(r.ImageFilename) + ".jpg";
                         if (System.IO.File.Exists(filePath))
                         {
-                            <img class="card-img-top img-fluid text-center" style=" width: 100%; max-height: 300px; object-fit: cover;" src="~/src/@(r.ImageFilename).jpg" alt="@r.Name" />
+                            <img class="card-img-top img-fluid text-center" style=" width: 100%; max-height: 300px; object-fit: cover; border-radius: 5px 5px 0px 0px;" src="~/src/@(r.ImageFilename).jpg" alt="@r.Name" />
                         }
                     }
 
@@ -49,12 +51,33 @@
                         <p class="card-text text-left">@r.Description</p>
                     </div>
 
-                    <a href="#" class="card-footer btn btn-outline-info border-secondary border-left-0 border-right-0 rounded-0">See this recipe!</a>
+                    <a class="card-footer btn btn-outline-danger border-secondary border-left-0 border-right-0 rounded-0" asp-controller="App" asp-action="Recipe" asp-route-id="@r.Id">See this recipe!</a>
                     <div class="card-footer text-center text-muted"><small>Last updated: @r.UpdateDT</small></div>
                 </div>
-            }
+            </div>
         }
-    </div>
+    }
 
 </div>
 
+
+@* PAGINACJA *@
+<div id="pagination" class="row d-flex justify-content-center p-2 mt-3 mb-3">
+    @if (ViewBag.SearchResultRecipes != null)
+    {
+        var prev = ViewBag.ActualPage - 1;
+        var next = ViewBag.ActualPage + 1;
+
+        prev = prev <= 0 ? 1 : prev;
+        next = next >= ViewBag.TotalPages ? ViewBag.TotalPages : next;
+
+        <a id="button" class="btn ml-1 mr-1" asp-controller="App" asp-action="Recipes" asp-route-page="1">First</a>
+        <a id="button" class="btn ml-1 mr-1" asp-controller="App" asp-action="Recipes" asp-route-page="@prev">Previous</a>
+        for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <a id="button" class="btn ml-1 mr-1" asp-controller="App" asp-action="Recipes" asp-route-page="@i">@i</a>
+        }
+        <a id="button" class="btn ml-1 mr-1" asp-controller="App" asp-action="Recipes" asp-route-page="@next">Next</a>
+        <a id="button" class="btn ml-1 mr-1" asp-controller="App" asp-action="Recipes" asp-route-page="@ViewBag.TotalPages">Last</a>
+    }
+</div>

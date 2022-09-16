@@ -9,5 +9,7 @@ namespace FoodEaterRecipes.Data
         IEnumerable<Recipe> SearchByNameSuggestions(string Name);
         IEnumerable<Ingredient> GetIngredientsByCategory(string category);
         bool SaveAll();
+        Recipe GetRecipeByName(string Name);
+        Recipe GetRecipeById(int id);
     }
 }

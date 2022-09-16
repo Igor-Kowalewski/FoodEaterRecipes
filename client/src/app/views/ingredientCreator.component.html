@@ -11,16 +11,16 @@
             <mat-form-field>
                 <input type="text" name="prefix" [(ngModel)]="prefix" (ngModelChange)="updateIngredientList(prefix)" matInput [matAutocomplete]="auto" placeholder="Search ingredient" />
                 <mat-autocomplete #auto="matAutocomplete" panelWidth="auto" (optionSelected)="setTemplateIngredient($event.option.value)">
-                        <mat-option *ngFor="let i of creator.searchIngredients" [value]="i.name">
-                            {{i.name}}
-                        </mat-option>
+                    <mat-option *ngFor="let i of creator.searchIngredients" [value]="i.name">
+                        {{i.name}}
+                    </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
         </form>
 
 
         <div class="col col-2 col-md-3 p-0 m-0 d-inline-block">
-            <button class="btn btn-light btn-block" id="addIngredientBtn" (click)="addIngredient(ingredientTemplate)"><i class="fas fa-plus fa-1x"></i> </button>
+            <button class="btn btn-light btn-block" id="addIngredientBtn" (click)="addIngredient(ingredientTemplate)"><fa-icon [icon]="faPlus"></fa-icon></button>
         </div>
 
 

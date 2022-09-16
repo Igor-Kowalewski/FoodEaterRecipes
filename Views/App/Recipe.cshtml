@@ -1,3 +1,28 @@
-﻿
+﻿@model Recipe
 @{
+    ViewData["Title"] = "Recipe";
 }
+
+<div class="row justify-content-around mt-3">
+    <div class="col-sm-12 col-md-4 col-xl-3 m-0 p-2">
+        <div id="recipesCard" class="card recipe-info m-0 p-0 bg-dark text-white shadow-lg">
+
+            @* If file in wwwroot\src\guid.jpg exists then draw an image *@
+            @{
+                var filePath = ViewBag.AbsolutePath + Convert.ToString(Model.ImageFilename) + ".jpg";
+                if (System.IO.File.Exists(filePath))
+                {
+                    <img class="card-img-top img-fluid text-center" style=" width: 100%; max-height: 300px; object-fit: cover; border-radius: 5px 5px 0px 0px;" src="~/src/@(@Model.ImageFilename).jpg" alt="@Model.Name" />
+                }
+            }
+
+            <div class="card-body text-center">
+                <h4 class="card-title text-left">@Model.Name</h4>
+                <p class="card-text text-left">@Model.Description</p>
+            </div>
+
+            <a class="card-footer btn btn-outline-danger border-secondary border-left-0 border-right-0 rounded-0" asp-controller="App" asp-action="Recipe" asp-route-id="@Model.Id">See this recipe!</a>
+            <div class="card-footer text-center text-muted"><small>Last updated: @Model.UpdateDT</small></div>
+        </div>
+    </div>
+</div>

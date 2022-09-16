@@ -96,6 +96,42 @@ namespace FoodEaterRecipes.Data
             }
         }
 
+
+        public Recipe GetRecipeByName(string name)
+        {
+            _logger.Log(LogLevel.Information, "GetRecipeByName was called");
+
+            try
+            {
+                return _context.Recipes
+                                .Where(r => r.Name == name)
+                                .FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to GetRecipeByName: {ex}");
+                return null;
+            }
+        }
+
+        public Recipe GetRecipeById(int id)
+        {
+            _logger.Log(LogLevel.Information, "GetRecipeById was called");
+
+            try
+            {
+                return _context.Recipes
+                                .Where(r => r.Id == id)
+                                .FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to GetRecipeById: {ex}");
+                return null;
+            }
+        }
+
+
         public bool SaveAll()
         {
             return _context.SaveChanges() > 0;
