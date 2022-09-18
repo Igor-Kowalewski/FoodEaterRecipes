@@ -14,28 +14,9 @@
     <link href="~/client/styles.css" rel="stylesheet" />
 }
 
-@* Angular injection *@
-<app-recipe-creator></app-recipe-creator> 
 
-
-@*<div class="container">
-        <div class="row">
-
-            <div class="col p-1 m-0 d-inline-block text-dark">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control p-2 m-0", @id = "SearchInputIngredient", @placeholder = "Search..." } })
-            </div>
-
-            <div class="col col-2 col-md-1 p-1 m-0 d-inline-block">
-                <button class="btn btn-light btn-block" id="addIngredientBtn"><i class="fas fa-plus fa-1x"></i> </button>
-            </div>
-
-            <div class="col col-12 col-md-6 p-1 m-0 d-inline-block text-center bg-dark rounded">
-                <p class="p-0 m-0" id="ingredientAdded" style="height: 38px;">Testowy div!</p>
-                <p>{{ 2 + 3 + 4 }}</p>
-
-                @{ await Html.RenderPartialAsync("_CreateRecipeForm"); }
-
-            </div>
-
-        </div>
-    </div>*@
+<div class="row d-flex justify-content-center p-2 mt-3 mb-3">
+    <div id="recipeCreator" class="m-3 p-3">
+        <app-recipe-creator></app-recipe-creator> @* Angular injection *@
+    </div>
+</div>

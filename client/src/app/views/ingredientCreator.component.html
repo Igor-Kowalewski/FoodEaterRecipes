@@ -1,7 +1,6 @@
 ﻿<div class="row border border-dark rounded-lg p-3 m-1 mb-3">
     <h5 class="h3">Ingredient</h5>
     <mat-divider></mat-divider><br>
-    <div class="container p-0 m-0">
         <!--<div class="col p-1 m-0 d-inline-block text-dark">-->
         <!--Zamieniam wersję ASP.NET na Angularową-->
         <!--@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control p-2 m-0", @id = "SearchInputIngredient", @placeholder = "Search..." }});-->
@@ -24,8 +23,8 @@
         </div>
 
 
-        <div class="col col-12 p-0 m-0 d-inline-block bg-dark rounded m-0 p-1">
-            <div class="col col-6 m-0 p-0 d-inline-block">
+        <div id="ingredientCreator" class="col col-12 p-0 m-0 d-inline-block rounded m-0 p-1">
+            <div class="col col-12 m-0 p-0 d-inline-block">
                 <form class="m-1 p-1">
                     <mat-form-field>
                         <input matInput class="mat-form-field m-0 p-1" required type="text" placeholder="Name" [(ngModel)]="ingredientTemplate.name" name="name" />
@@ -57,4 +56,3 @@
             </div>-->
         </div>
     </div>
-</div>

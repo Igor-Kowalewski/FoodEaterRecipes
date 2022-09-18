@@ -159,8 +159,21 @@ namespace FoodEaterRecipes.Controllers
             Recipe response = _repository.GetRecipeByName(Name);
             if (response != null)
             {
-                //ViewBag.SearchResultRecipe = _repository.GetRecipeByName(Name);
+                var ingredients = _repository.GetRecipeDetailsById(response.Id);
+
+                RecipeIngredientDTO summary = new()
+                {
+                    Name = "Total",
+                    Amount = ingredients.Sum(i => i.Amount),
+                    Kcal = ingredients.Sum(i => i.Kcal),
+                    Carbs = ingredients.Sum(i => i.Carbs),
+                    Fats = ingredients.Sum(i => i.Fats),
+                    Proteins = ingredients.Sum(i => i.Proteins)
+                };
+
                 ViewBag.AbsolutePath = _environment.WebRootPath + $"\\src\\";
+                ViewBag.Ingredients = ingredients;
+                ViewBag.Summary = summary;
 
                 return View(response);
             }
@@ -175,8 +188,22 @@ namespace FoodEaterRecipes.Controllers
             Recipe response = _repository.GetRecipeById(id);
             if (response != null)
             {
-                //ViewBag.SearchResultRecipe = _repository.GetRecipeById(id);
+                var ingredients = _repository.GetRecipeDetailsById(response.Id);
+
+                RecipeIngredientDTO summary = new()
+                {
+                    Name = "Total",
+                    Amount = Math.Round(ingredients.Sum(i => i.Amount),2),
+                    Kcal = Math.Round(ingredients.Sum(i => i.Kcal), 2),
+                    Carbs = Math.Round(ingredients.Sum(i => i.Carbs), 2),
+                    Fats = Math.Round(ingredients.Sum(i => i.Fats), 2),
+                    Proteins = Math.Round(ingredients.Sum(i => i.Proteins), 2)
+                };
+
                 ViewBag.AbsolutePath = _environment.WebRootPath + $"\\src\\";
+                ViewBag.Ingredients = ingredients;
+                ViewBag.Summary = summary;
+
                 return View(response);
             }
 

@@ -1,4 +1,5 @@
 ﻿using FoodEaterRecipes.Data.Entities;
+using FoodEaterRecipes.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -103,9 +104,11 @@ namespace FoodEaterRecipes.Data
 
             try
             {
-                return _context.Recipes
+                var result = _context.Recipes
                                 .Where(r => r.Name == name)
                                 .FirstOrDefault();
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -120,9 +123,11 @@ namespace FoodEaterRecipes.Data
 
             try
             {
-                return _context.Recipes
+                var result = _context.Recipes
                                 .Where(r => r.Id == id)
                                 .FirstOrDefault();
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -131,6 +136,34 @@ namespace FoodEaterRecipes.Data
             }
         }
 
+        public IQueryable<RecipeIngredientDTO> GetRecipeDetailsById(int id)
+        {
+            _logger.Log(LogLevel.Information, "GetRecipeDetailsById was called");
+
+            try
+            {
+                var result = from r in _context.Recipes
+                             join ri in _context.RecipeIngredients on r.Id equals ri.RecipeId
+                             join i in _context.Ingredients on ri.IngredientId equals i.Id
+                             where r.Id == id
+                             select new RecipeIngredientDTO()
+                             {
+                                 Name = i.Name,
+                                 Amount = ri.IngredientWeight,
+                                 Kcal = (double)((i.Fats * 9) + (i.Carbohydrates * 4) + (i.Proteins * 4)),
+                                 Fats = (double)i.Fats,
+                                 Carbs = (double)i.Carbohydrates,
+                                 Proteins = (double)i.Proteins
+                             };
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to GetRecipeById: {ex}");
+                return null;
+            }
+        }
 
         public bool SaveAll()
         {

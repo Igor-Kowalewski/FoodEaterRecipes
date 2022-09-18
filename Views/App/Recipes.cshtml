@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css" integrity="sha512-Q2qvb9omuMvaoo6ofA3xaiD3b1aA7BlQGYxEOTij6i4HRsDNB7K2uEUHbbymUqqFDduToacMzKNYYVRwe4H2yw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 }
 
-<div id="recipesNav" class="row justify-content-around">
+<div id="recipesNav" class="row justify-content-around p-2">
     <form method="get" class="col-sm-12 col-md-10 m-0 p-2 pb-0 pb-md-2" asp-controller="App" asp-action="Recipe">
         <div id="Recipes" class="col-sm-12 col-md-9 col-lg-10 m-0 p-0 pr-md-2 float-left">
             @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control m-0 w-100", @id = "SearchInputRecipes", @placeholder = "Search..." } })
@@ -29,13 +29,13 @@
 </div>
 
 
-<div id="recipesContent" class="row mt-3 d-flex justify-content-center">
+<div id="recipesContent" class="row mt-3 d-flex justify-content-center p-2">
     @if (ViewBag.SearchResultRecipes != null)
     {
         foreach (var r in ViewBag.SearchResultRecipes)
         {
             <div class="col-sm-12 col-md-4 col-xl-3 m-0 p-2">
-                <div id="recipesCard" class="card recipe-info m-0 p-0 bg-dark text-white shadow-lg">
+                <div id="recipesCard" class="card recipe-info m-0 p-0 text-white shadow-lg">
 
                     @* If file in wwwroot\src\guid.jpg exists then draw an image *@
                     @{
@@ -46,12 +46,12 @@
                         }
                     }
 
-                    <div class="card-body text-center">
+                    <div class="card-body text-center ml-3 mr-3">
                         <h4 class="card-title text-left">@r.Name</h4>
                         <p class="card-text text-left">@r.Description</p>
                     </div>
 
-                    <a class="card-footer btn btn-outline-danger border-secondary border-left-0 border-right-0 rounded-0" asp-controller="App" asp-action="Recipe" asp-route-id="@r.Id">See this recipe!</a>
+                    <a class="card-footer btn btn-outline-danger border-secondary border-left-0 border-right-0 rounded-0 ml-4 mr-4" asp-controller="App" asp-action="Recipe" asp-route-id="@r.Id">See this recipe!</a>
                     <div class="card-footer text-center text-muted"><small>Last updated: @r.UpdateDT</small></div>
                 </div>
             </div>

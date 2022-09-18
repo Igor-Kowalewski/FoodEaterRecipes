@@ -3,26 +3,70 @@
     ViewData["Title"] = "Recipe";
 }
 
-<div class="row justify-content-around mt-3">
-    <div class="col-sm-12 col-md-4 col-xl-3 m-0 p-2">
-        <div id="recipesCard" class="card recipe-info m-0 p-0 bg-dark text-white shadow-lg">
+<div id="recipesContent" class="row justify-content-around mt-3 p-2">
+    <div class="col-sm-12 col-md-9 col-lg-6 m-0 p-2">
+        <div id="recipesCard" class="card recipe-info m-0 p-0 text-white shadow-lg">
 
             @* If file in wwwroot\src\guid.jpg exists then draw an image *@
             @{
                 var filePath = ViewBag.AbsolutePath + Convert.ToString(Model.ImageFilename) + ".jpg";
                 if (System.IO.File.Exists(filePath))
                 {
-                    <img class="card-img-top img-fluid text-center" style=" width: 100%; max-height: 300px; object-fit: cover; border-radius: 5px 5px 0px 0px;" src="~/src/@(@Model.ImageFilename).jpg" alt="@Model.Name" />
+                    <img class="card-img-top img-fluid text-center" style=" width: 100%; max-height: 600px; object-fit: cover; border-radius: 5px 5px 0px 0px;" src="~/src/@(@Model.ImageFilename).jpg" alt="@Model.Name" />
                 }
             }
+            <h4 class="card-title text-center m-2 p-2">@Model.Name</h4>
 
-            <div class="card-body text-center">
-                <h4 class="card-title text-left">@Model.Name</h4>
-                <p class="card-text text-left">@Model.Description</p>
+            <div class="card-footer text-center text-muted">
+                <small>Last updated: @Model.UpdateDT</small>
             </div>
+        </div>
+    </div>
 
-            <a class="card-footer btn btn-outline-danger border-secondary border-left-0 border-right-0 rounded-0" asp-controller="App" asp-action="Recipe" asp-route-id="@Model.Id">See this recipe!</a>
-            <div class="card-footer text-center text-muted"><small>Last updated: @Model.UpdateDT</small></div>
+    <div class="col-sm-12 col-md-9 col-lg-6 m-0 p-2">
+        <div id="recipesCard" class="card recipe-info m-0 p-2 text-white shadow-lg">
+
+            <p class="h3 pb-2">Ingredients</p>
+            <table id="recipeIngredientsTable" class="table table-hover m-0 p-0">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Kcal</th>
+                        <th scope="col">Proteins</th>
+                        <th scope="col">Carbs</th>
+                        <th scope="col">Fats</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.Ingredients)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Amount</td>
+                            <td>@item.Kcal</td>
+                            <td>@item.Proteins</td>
+                            <td>@item.Carbs</td>
+                            <td>@item.Fats</td>
+                        </tr>
+                    }
+                <tr>
+                    <td><b>@ViewBag.Summary.Name</b></td>
+                    <td><b>@ViewBag.Summary.Amount</b></td>
+                    <td><b>@ViewBag.Summary.Kcal</b></td>
+                    <td><b>@ViewBag.Summary.Proteins</b></td>
+                    <td><b>@ViewBag.Summary.Carbs</b></td>
+                    <td><b>@ViewBag.Summary.Fats</b></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+        <div id="recipesCard" class="card recipe-info m-0 p-2 text-white shadow-lg">
+
+            <p class="h3 pb-2">How to prepare</p>
+            <p class="text-left">@Model.Description</p>
         </div>
     </div>
 </div>

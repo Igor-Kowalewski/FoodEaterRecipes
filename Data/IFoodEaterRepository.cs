@@ -1,5 +1,7 @@
 ﻿using FoodEaterRecipes.Data.Entities;
+using FoodEaterRecipes.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FoodEaterRecipes.Data
 {
@@ -11,5 +13,6 @@ namespace FoodEaterRecipes.Data
         bool SaveAll();
         Recipe GetRecipeByName(string Name);
         Recipe GetRecipeById(int id);
+        IQueryable<RecipeIngredientDTO> GetRecipeDetailsById(int id);
     }
 }

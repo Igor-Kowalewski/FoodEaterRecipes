@@ -8,9 +8,9 @@
 
 
 <!--<button class="btn btn-dark" id="contactUsButton">Contact Us!</button>-->
-<div class="col-md-6 offset-md-3" id="contactUsForm">
-    <div class="card card-body bg-dark text-light">
-        <form method="post">
+<div id="contactUsForm" class="row d-flex justify-content-center p-2 mt-3 mb-3">
+    <div id="contactForm" class="card card-body text-light col-12 col-md-9 col-lg-6">
+        <form method="post" class="col-12">
             <div asp-validation-summary="ModelOnly"></div>
             <!-- Thanks to below way of using TagHelpers on label we set focus to
             input after clicking on input label - very good for mobile/touchscreens -->
@@ -35,7 +35,7 @@
                 <span asp-validation-for="Message" class="text-warning"></span>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-dark"><i class="fas fa-envelope fa-1x"></i> Send Message</button>
+                <button type="submit" id="button" class="btn"><i class="fas fa-envelope fa-1x"></i> Send Message</button>
                 <div class="text-success">@ViewBag.UserMessage</div>
             </div>
         </form>

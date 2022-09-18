@@ -25,7 +25,7 @@ export default class RecipeCreator {
 
     working = false;
     uploadFile?: File | null;
-    uploadFileLabel: string | undefined = 'Choose an image to upload';
+    uploadFileLabel: string | undefined = 'Choose an image';
     uploadProgress: number = 0;
     uploadUrl: string = '';
 
@@ -109,7 +109,7 @@ export default class RecipeCreator {
 
     upload() {
         if (!this.uploadFile) {
-            alert('Choose a file to upload first');
+            alert('Choose an image');
             return;
         }
 
