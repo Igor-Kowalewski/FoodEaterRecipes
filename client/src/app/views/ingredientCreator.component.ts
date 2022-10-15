@@ -60,7 +60,17 @@ export default class IngredientCreator {
 
     // dodawanie nowego składnika do przepisu
     addIngredient(ingredientTemplate: Ingredient) {
-        let ingredientCopy: Ingredient = new Ingredient(ingredientTemplate); // shallow copy template
+
+        // shallow copy
+        let ingredientCopy: Ingredient = new Ingredient(ingredientTemplate);
+
+        // zmiana wartości odżywczych w 100g na wziętą wagę produktu
+        ingredientCopy.kcal = (Number(ingredientCopy.kcal) * Number(ingredientCopy.weight)) / 100;
+        ingredientCopy.carbs = (Number(ingredientCopy.carbs) * Number(ingredientCopy.weight)) / 100;
+        ingredientCopy.proteins = (Number(ingredientCopy.proteins) * Number(ingredientCopy.weight)) / 100;
+        ingredientCopy.fats = (Number(ingredientCopy.fats) * Number(ingredientCopy.weight)) / 100;
+
+
         this.creator.tableDataPush.next(ingredientCopy); // and push copy to recipeingredients
     }
 }

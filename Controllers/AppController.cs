@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PagedList;
@@ -13,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -24,12 +26,15 @@ namespace FoodEaterRecipes.Controllers
         private readonly IMailService _mailService;
         private readonly IFoodEaterRepository _repository;
         private readonly IWebHostEnvironment _environment;
+        private readonly UserManager<User> _userManager;
 
-        public AppController(IMailService mailService, IFoodEaterRepository repository, IWebHostEnvironment environment)
+
+        public AppController(IMailService mailService, IFoodEaterRepository repository, IWebHostEnvironment environment, UserManager<User> userManager)
         {
             _mailService = mailService;
             _repository = repository;
             _environment = environment;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -164,11 +169,11 @@ namespace FoodEaterRecipes.Controllers
                 RecipeIngredientDTO summary = new()
                 {
                     Name = "Total",
-                    Amount = ingredients.Sum(i => i.Amount),
-                    Kcal = ingredients.Sum(i => i.Kcal),
-                    Carbs = ingredients.Sum(i => i.Carbs),
-                    Fats = ingredients.Sum(i => i.Fats),
-                    Proteins = ingredients.Sum(i => i.Proteins)
+                    Amount = Math.Round(ingredients.Sum(i => i.Amount), 2),
+                    Kcal = Math.Round(ingredients.Sum(i => i.Kcal), 2),
+                    Carbs = Math.Round(ingredients.Sum(i => i.Carbs), 2),
+                    Fats = Math.Round(ingredients.Sum(i => i.Fats), 2),
+                    Proteins = Math.Round(ingredients.Sum(i => i.Proteins), 2)
                 };
 
                 ViewBag.AbsolutePath = _environment.WebRootPath + $"\\src\\";
@@ -215,27 +220,110 @@ namespace FoodEaterRecipes.Controllers
         //[Authorize(AuthenticationSchemes = "Bearer")]
         [Authorize(AuthenticationSchemes = "Identity.Application," + JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult Create()
-        {  
+        {
             return View();
         }
 
 
+        [Route("RandomGuid")]
+        [HttpGet("RandomGuid")]
+        [Authorize(AuthenticationSchemes = "Identity.Application," + JwtBearerDefaults.AuthenticationScheme)]
+        public JsonResult Get()
+        {
+            return Json(Guid.NewGuid());
+        }
+        
+
         [HttpPost("Create")]
         //[Authorize(AuthenticationSchemes = "Bearer")]
-        [Authorize(AuthenticationSchemes = "Identity.Application," + JwtBearerDefaults.AuthenticationScheme)]
-        public IActionResult OnCreatePostAsync()
+        //[Authorize(AuthenticationSchemes = "Identity.Application," + JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<JsonResult> CreateRecipeAsync()
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return View();
-            //}
+            IFormCollection recipe = Request.Form;
+            Guid RecipeGuid = new(recipe["RecipeGuid"].ToString());
+            string RecipeName = recipe["RecipeName"].ToString();
+            string RecipeDesc = recipe["RecipeDesc"].ToString();
+            List<NewRecipeIngredientDTO> RecipeIngredients = JsonConvert.DeserializeObject<List<NewRecipeIngredientDTO>>(recipe["RecipeIngredients"]);
 
-            //_context.Recipes.Add(recipe);
-            //await _context.SaveChangesAsync();
 
-            int id = 1;
-            return View("Index", id);
-            //return View("Recipe", id);
+            // Dodawanie oraz pobieranie nowych składników
+            // Uwaga!!! Jeśli elementy się powtarzają to zostawiamy pojedyncze pozycje [DISTINCT] !!!
+            List<Ingredient> ingList = new();
+            foreach (var item in RecipeIngredients)
+            {
+                Ingredient i = new()
+                {
+                    Name = item.Name,
+                    Carbohydrates = Math.Round((decimal)item.Carbs * 100 / (decimal)item.Weight, 2),
+                    Proteins = Math.Round((decimal)item.Proteins * 100 / (decimal)item.Weight, 2),
+                    Fats = Math.Round((decimal)item.Fats * 100 / (decimal)item.Weight, 2),
+                    UpdateDT = DateTime.Now,
+                    CreateDT = DateTime.Now,
+                    UserId = _userManager.GetUserId(User),
+                    IngredientCategoryId = 2 /// common testowo
+                };
+
+                ingList.Add(i);
+            }
+
+            var distinctIngList = ingList
+                .GroupBy(ingredient => new { ingredient.Name, ingredient.Carbohydrates, ingredient.Proteins, ingredient.Fats })
+                .Select(grp => grp.First())
+                .ToList();
+
+            IEnumerable<Ingredient> ingredientsAdded = _repository.AddIngredients(distinctIngList);
+
+
+            // Dodanie oraz pobranie nowego przepisu
+            Recipe r = new()
+            {
+                Name = RecipeName,
+                ImageFilename = RecipeGuid,
+                Description = RecipeDesc,
+                UpdateDT = DateTime.Now,
+                CreateDT = DateTime.Now,
+                UserId = _userManager.GetUserId(User),
+                RecipeIngredient = null
+            };
+            var recipeAdded = _repository.AddRecipe(r);
+
+
+            // Dodawanie RecipeIngredients
+            List<RecipeIngredient> ri = new();
+            foreach (var item in RecipeIngredients)
+            {
+                // Pobieranie ID nowego składnika dodanego do bazy
+                var ingredientId = ingredientsAdded
+                    .Where(x => x.Name == item.Name 
+                        && x.Carbohydrates == Math.Round((decimal)item.Carbs * 100 / (decimal)item.Weight, 2)
+                        && x.Proteins == Math.Round((decimal)item.Proteins * 100 / (decimal)item.Weight, 2)
+                        && x.Fats == Math.Round((decimal)item.Fats * 100 / (decimal)item.Weight, 2))
+                    .First().Id;
+
+
+                // Dodawanie pozycji
+                ri.Add(new RecipeIngredient()
+                {
+                    IngredientWeight = (int)item.Weight,
+                    UpdateDT = DateTime.Now,
+                    CreateDT = DateTime.Now,
+                    RecipeId = recipeAdded.Id,
+                    IngredientId = ingredientId
+                });
+            }
+            var recipeIngredientAdded = _repository.AddRecipeIngredients(ri);
+
+
+            if (recipeIngredientAdded.Any())
+            {
+                Response.StatusCode = (int)HttpStatusCode.OK;
+                return Json("/Recipes");
+            }
+            else
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json("/Error");
+            }
         }
 
 
@@ -262,7 +350,10 @@ namespace FoodEaterRecipes.Controllers
                     Directory.CreateDirectory(uploadsDir);
 
                 IFormFile file = Request.Form.Files[0];
-                string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                //string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).Name.Trim('"');
+                fileName += ".jpg";
+
                 string fullPath = Path.Combine(uploadsDir, fileName);
 
                 var buffer = 1024 * 1024;

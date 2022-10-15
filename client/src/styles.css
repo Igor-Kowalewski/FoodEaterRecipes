@@ -51,6 +51,22 @@ mat-divider {
     }
 
 
+#addRecipeBtn {
+    color: #eeeeee;
+    background-color: #000000;
+    border: solid 1px #eeeeee;
+    min-height: 38px !important;
+}
+
+
+    #addRecipeBtn:hover,
+    #addRecipeBtn:focus {
+        color: #eeeeee !important;
+        border-color: rgb(255, 66, 66);
+        box-shadow: 0 0 0 0.1rem rgb(255, 66, 66);
+    }
+
+
 /* PLACEHOLDER COLOR */
 .mat-form-field-outline, .mat-form-field-empty.mat-form-field-label, .mat-form-field-label, .mat-form-field-underline, .mat-input-element, ::placeholder
 {

@@ -6,7 +6,7 @@ import { Ingredient } from "../shared/Ingredient";
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faPenToSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -17,8 +17,14 @@ import { faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
 export default class RecipeCreator {
 
+    public recipeGuid: string = '';
+    public recipeName: string = '';
+    public recipeDesc: string = '';
     public ingredients: Ingredient[] = [];
     public recipeSummary: Ingredient = new Ingredient;
+
+
+    public faPlus;
     public faTrash;
     public faPenToSquare;
 
@@ -30,23 +36,27 @@ export default class RecipeCreator {
     uploadUrl: string = '';
 
 
-
-    displayedColumns: string[] = ['name', 'weight', 'kcal', 'carbs', 'fats', 'proteins','actions'];
+    displayedColumns: string[] = ['name','weight','kcal','carbs','fats','proteins','actions'];
     dataSource!: MatTableDataSource<Ingredient>;
-
 
 
     constructor(private creator: Creator, private http: HttpClient, private _liveAnnouncer: LiveAnnouncer) {
         this.ingredients = creator.recipeIngredients;
         this.recipeSummary = creator.recipeSummary;
+        this.faPlus = faPlus;
         this.faTrash = faTrash;
         this.faPenToSquare = faPenToSquare;
     }
 
 
     ngOnInit() {
-        this.creator.tableDataPush.subscribe((value) => {
+        this.http.get('/RandomGuid').subscribe(result => {
+            this.recipeGuid = result.toString();
+            console.log('Recipe Guid: ' + this.recipeGuid);
+        });
 
+
+        this.creator.tableDataPush.subscribe((value) => {
             if (Ingredient.isValid(value)) {
                 this.creator.recipeIngredients.push(value)
                 console.log("Adding ingredient: " + value.name)
@@ -103,6 +113,7 @@ export default class RecipeCreator {
         if (files.length > 0) {
             this.uploadFile = files.item(0);
             this.uploadFileLabel = this.uploadFile?.name;
+            //this.uploadFileLabel = this.recipeGuid;
         }
     }
 
@@ -114,7 +125,8 @@ export default class RecipeCreator {
         }
 
         const formData = new FormData();
-        formData.append(this.uploadFile.name, this.uploadFile);
+        ///formData.append(this.uploadFile.name, this.uploadFile);
+        formData.append(this.recipeGuid, this.uploadFile);
 
         const url = `/api/src/upload`;
         const uploadReq = new HttpRequest('POST', url, formData, {
@@ -164,6 +176,37 @@ export default class RecipeCreator {
 
     deleteIngredient(ingredient: Ingredient) {
         this.creator.tableDataPop.next(ingredient);
+    }
+
+
+
+    addRecipe() {
+
+        const formData = new FormData();
+        formData.append('RecipeGuid', this.recipeGuid);
+        formData.append('RecipeName', this.recipeName);
+        formData.append('RecipeDesc', this.recipeDesc);
+        formData.append('RecipeIngredients', JSON.stringify(this.ingredients));
+
+
+        const url = '/Create';
+        const request = new HttpRequest('POST', url, formData, {});
+
+
+        /// prawidłowe dodanie - przekierowanie do przepisów
+        /// nieprawidłowe dodanie - pozostanie w kreatorze i wyświetlenie alertu
+        this.http.request(request).subscribe((response: any) => {
+
+            if (response.body) {
+                ///window.location.href = 'http://www.google.com/';
+                console.log('Adding new recipe: ' + response.body)
+                window.location.href = response.body;
+            }
+
+
+        }, (error: any) => {
+            console.error(error);
+        }).add();
     }
 
 }

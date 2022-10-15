@@ -2,6 +2,7 @@
 using FoodEaterRecipes.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FoodEaterRecipes.Data
 {
@@ -14,5 +15,9 @@ namespace FoodEaterRecipes.Data
         Recipe GetRecipeByName(string Name);
         Recipe GetRecipeById(int id);
         IQueryable<RecipeIngredientDTO> GetRecipeDetailsById(int id);
+        IEnumerable<Ingredient> AddIngredients(IEnumerable<Ingredient> i);
+        Recipe AddRecipe(Recipe r);
+        Ingredient GetIngredientById(int id);
+        IEnumerable<RecipeIngredient> AddRecipeIngredients(IEnumerable<RecipeIngredient> ri);
     }
 }

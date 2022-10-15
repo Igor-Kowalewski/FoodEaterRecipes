@@ -8,6 +8,8 @@
     proteins: number | string;
     fats: number | string;
 
+
+    /// setting default model values
     constructor(ingredient?: Ingredient) {
         this.id = crypto.randomUUID();
         this.name = ingredient?.name ? ingredient.name : '';
@@ -18,16 +20,20 @@
         this.proteins = ingredient?.proteins ? Number(ingredient.proteins).toFixed(2) : 0;
     };
 
+
+    /// self validation
     static isValid(i: Ingredient): boolean {
 
-        if (   i.name.length > 0
-            && i.weight > 0
-            && i.kcal > 0
-            && i.carbs > 0
-            && i.fats > 0
-            && i.proteins > 0 )
-        return true;
+        if (i.name.length == 0) {
+            alert("Ingredient name is required!")
+            return false;
+        }
 
-        return false;
+        if (i.weight == 0) {
+            alert("Ingredient weight is required!")
+            return false;
+        }
+
+        return true;
     }
 }

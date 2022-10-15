@@ -51,6 +51,7 @@ namespace FoodEaterRecipes
             builder.Sources.Clear();
             builder.SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("config.json")
+                .AddUserSecrets<Program>(true) // Use connection strings from secrets.json
                 .AddEnvironmentVariables(); // If Environment Variables Exists override config.json
         }
     }

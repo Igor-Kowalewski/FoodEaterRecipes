@@ -165,9 +165,42 @@ namespace FoodEaterRecipes.Data
             }
         }
 
+        public IEnumerable<Ingredient> AddIngredients(IEnumerable<Ingredient> i)
+        {
+            _logger.Log(LogLevel.Information, "AddIngredients was called");
+            _context.Ingredients.AddRange(i);
+            _context.SaveChanges();
+            return i;
+        }
+
+        public Recipe AddRecipe(Recipe r)
+        {
+            _logger.Log(LogLevel.Information, "AddRecipe was called");
+            _context.Recipes.Add(r);
+            _context.SaveChanges();
+            return r;
+        }
+
+        public Ingredient GetIngredientById(int id)
+        {
+            _logger.Log(LogLevel.Information, "GetIngredientById was called");
+            return _context.Ingredients.Where(x => x.Id == id).First();
+        }
+
+
+        public IEnumerable<RecipeIngredient> AddRecipeIngredients(IEnumerable<RecipeIngredient> ri)
+        {
+            _logger.Log(LogLevel.Information, "AddRecipeIngredients was called");
+            _context.RecipeIngredients.AddRange(ri);
+            _context.SaveChanges();
+            return ri;
+        }
+
+
         public bool SaveAll()
         {
             return _context.SaveChanges() > 0;
         }
+
     }
 }
