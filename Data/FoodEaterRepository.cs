@@ -150,10 +150,10 @@ namespace FoodEaterRecipes.Data
                              {
                                  Name = i.Name,
                                  Amount = ri.IngredientWeight,
-                                 Kcal = (double)((i.Fats * 9) + (i.Carbohydrates * 4) + (i.Proteins * 4)),
-                                 Fats = (double)i.Fats,
-                                 Carbs = (double)i.Carbohydrates,
-                                 Proteins = (double)i.Proteins
+                                 Kcal = Math.Round((double)((i.Fats * 9 * ri.IngredientWeight) + (i.Carbohydrates * 4 * ri.IngredientWeight) + (i.Proteins * 4 * ri.IngredientWeight))/100, 2),
+                                 Fats = Math.Round((double)i.Fats * ri.IngredientWeight / 100, 2),
+                                 Carbs = Math.Round((double)i.Carbohydrates * ri.IngredientWeight / 100, 2),
+                                 Proteins = Math.Round((double)i.Proteins * ri.IngredientWeight / 100, 2 )
                              };
 
                 return result;

@@ -50,7 +50,7 @@ namespace FoodEaterRecipes.Controllers
             IEnumerable<Recipe> response = _repository.GetAllRecipes();
             if (response != null && response.GetEnumerator().MoveNext())
             {
-                int pageSize = 6;
+                int pageSize = 8;
                 page = page == null ? 1 : page; 
                 int pageNumber = (int)(page == 0 ? 1 : page);
 
@@ -161,26 +161,18 @@ namespace FoodEaterRecipes.Controllers
         [HttpGet("Recipe")]
         public IActionResult Recipe(string Name)
         {
-            Recipe response = _repository.GetRecipeByName(Name);
-            if (response != null)
+            Recipe recipe = _repository.GetRecipeByName(Name);
+            if (recipe != null)
             {
-                var ingredients = _repository.GetRecipeDetailsById(response.Id);
-
-                RecipeIngredientDTO summary = new()
-                {
-                    Name = "Total",
-                    Amount = Math.Round(ingredients.Sum(i => i.Amount), 2),
-                    Kcal = Math.Round(ingredients.Sum(i => i.Kcal), 2),
-                    Carbs = Math.Round(ingredients.Sum(i => i.Carbs), 2),
-                    Fats = Math.Round(ingredients.Sum(i => i.Fats), 2),
-                    Proteins = Math.Round(ingredients.Sum(i => i.Proteins), 2)
-                };
-
-                ViewBag.AbsolutePath = _environment.WebRootPath + $"\\src\\";
+                var ingredients = _repository.GetRecipeDetailsById(recipe.Id);
                 ViewBag.Ingredients = ingredients;
+
+                RecipeIngredientDTO summary = GetNutrientsSumFromIngredients(ingredients);
                 ViewBag.Summary = summary;
 
-                return View(response);
+                ViewBag.AbsolutePath = _environment.WebRootPath + $"\\src\\";
+
+                return View(recipe);
             }
 
             return RedirectToPage("/Error");
@@ -190,31 +182,35 @@ namespace FoodEaterRecipes.Controllers
         [HttpGet("Recipe/{id}")]
         public IActionResult Recipe(int id)
         {
-            Recipe response = _repository.GetRecipeById(id);
-            if (response != null)
+            Recipe recipe = _repository.GetRecipeById(id);
+            if (recipe != null)
             {
-                var ingredients = _repository.GetRecipeDetailsById(response.Id);
-
-                RecipeIngredientDTO summary = new()
-                {
-                    Name = "Total",
-                    Amount = Math.Round(ingredients.Sum(i => i.Amount),2),
-                    Kcal = Math.Round(ingredients.Sum(i => i.Kcal), 2),
-                    Carbs = Math.Round(ingredients.Sum(i => i.Carbs), 2),
-                    Fats = Math.Round(ingredients.Sum(i => i.Fats), 2),
-                    Proteins = Math.Round(ingredients.Sum(i => i.Proteins), 2)
-                };
-
-                ViewBag.AbsolutePath = _environment.WebRootPath + $"\\src\\";
+                var ingredients = _repository.GetRecipeDetailsById(recipe.Id);
                 ViewBag.Ingredients = ingredients;
+
+                RecipeIngredientDTO summary = GetNutrientsSumFromIngredients(ingredients);
                 ViewBag.Summary = summary;
 
-                return View(response);
+                ViewBag.AbsolutePath = _environment.WebRootPath + $"\\src\\";
+
+                return View(recipe);
             }
 
             return RedirectToPage("/Error");
         }
 
+        private static RecipeIngredientDTO GetNutrientsSumFromIngredients(IQueryable<RecipeIngredientDTO> ingredients)
+        {
+            return new()
+            {
+                Name = "Total",
+                Amount = Math.Round(ingredients.Sum(i => i.Amount), 2),
+                Kcal = Math.Round(ingredients.Sum(i => i.Kcal), 2),
+                Carbs = Math.Round(ingredients.Sum(i => i.Carbs), 2),
+                Fats = Math.Round(ingredients.Sum(i => i.Fats), 2),
+                Proteins = Math.Round(ingredients.Sum(i => i.Proteins), 2)
+            };
+        }
 
         [HttpGet("Create")]
         //[Authorize(AuthenticationSchemes = "Bearer")]
